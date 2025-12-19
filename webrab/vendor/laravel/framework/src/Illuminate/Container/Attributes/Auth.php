@@ -7,24 +7,24 @@ use Illuminate\Contracts\Container\Container;
 use Illuminate\Contracts\Container\ContextualAttribute;
 
 #[Attribute(Attribute::TARGET_PARAMETER)]
-class Config implements ContextualAttribute
+class Auth implements ContextualAttribute
 {
     /**
      * Create a new class instance.
      */
-    public function __construct(public string $key, public mixed $default = null)
+    public function __construct(public ?string $guard = null)
     {
     }
 
     /**
-     * Resolve the configuration value.
+     * Resolve the authentication guard.
      *
      * @param  self  $attribute
      * @param  \Illuminate\Contracts\Container\Container  $container
-     * @return mixed
+     * @return \Illuminate\Contracts\Auth\Guard|\Illuminate\Contracts\Auth\StatefulGuard
      */
     public static function resolve(self $attribute, Container $container)
     {
-        return $container->make('config')->get($attribute->key, $attribute->default);
+        return $container->make('auth')->guard($attribute->guard);
     }
 }
