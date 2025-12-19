@@ -4,7 +4,7 @@ namespace Illuminate\Auth\Events;
 
 use Illuminate\Queue\SerializesModels;
 
-class Login
+class Logout
 {
     use SerializesModels;
 
@@ -13,12 +13,10 @@ class Login
      *
      * @param  string  $guard  The authentication guard name.
      * @param  \Illuminate\Contracts\Auth\Authenticatable  $user  The authenticated user.
-     * @param  bool  $remember  Indicates if the user should be "remembered".
      */
     public function __construct(
         public $guard,
         public $user,
-        public $remember,
     ) {
     }
 }

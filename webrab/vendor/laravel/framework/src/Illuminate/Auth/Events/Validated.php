@@ -4,7 +4,7 @@ namespace Illuminate\Auth\Events;
 
 use Illuminate\Queue\SerializesModels;
 
-class Login
+class Validated
 {
     use SerializesModels;
 
@@ -12,13 +12,11 @@ class Login
      * Create a new event instance.
      *
      * @param  string  $guard  The authentication guard name.
-     * @param  \Illuminate\Contracts\Auth\Authenticatable  $user  The authenticated user.
-     * @param  bool  $remember  Indicates if the user should be "remembered".
+     * @param  \Illuminate\Contracts\Auth\Authenticatable  $user  The user retrieved and validated from the User Provider.
      */
     public function __construct(
         public $guard,
         public $user,
-        public $remember,
     ) {
     }
 }
