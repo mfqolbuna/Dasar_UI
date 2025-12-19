@@ -8,7 +8,7 @@ namespace Hamcrest\Text;
 /**
  * Tests if the argument is a string that contains a substring.
  */
-class StringContains extends SubstringMatcher
+class StringStartsWith extends SubstringMatcher
 {
 
     public function __construct($substring)
@@ -16,30 +16,25 @@ class StringContains extends SubstringMatcher
         parent::__construct($substring);
     }
 
-    public function ignoringCase()
-    {
-        return new StringContainsIgnoringCase($this->_substring);
-    }
-
     /**
-     * Matches if value is a string that contains $substring.
+     * Matches if value is a string that starts with $substring.
      *
      * @factory
      */
-    public static function containsString($substring)
+    public static function startsWith($substring)
     {
         return new self($substring);
     }
 
     // -- Protected Methods
 
-    protected function evalSubstringOf($item)
+    protected function evalSubstringOf($string)
     {
-        return (false !== strpos((string) $item, $this->_substring));
+        return (substr($string, 0, strlen($this->_substring)) === $this->_substring);
     }
 
     protected function relationship()
     {
-        return 'containing';
+        return 'starting with';
     }
 }
