@@ -2,16 +2,8 @@
 
 namespace Illuminate\Contracts\Notifications;
 
-interface Factory
+interface Dispatcher
 {
-    /**
-     * Get a channel instance by name.
-     *
-     * @param  string|null  $name
-     * @return mixed
-     */
-    public function channel($name = null);
-
     /**
      * Send the given notification to the given notifiable entities.
      *
@@ -26,7 +18,8 @@ interface Factory
      *
      * @param  \Illuminate\Support\Collection|array|mixed  $notifiables
      * @param  mixed  $notification
+     * @param  array|null  $channels
      * @return void
      */
-    public function sendNow($notifiables, $notification);
+    public function sendNow($notifiables, $notification, ?array $channels = null);
 }
