@@ -7,15 +7,15 @@ namespace Illuminate\Contracts\Pagination;
  *
  * @template-covariant TValue
  */
-interface Paginator
+interface CursorPaginator
 {
     /**
-     * Get the URL for a given page.
+     * Get the URL for a given cursor.
      *
-     * @param  int  $page
+     * @param  \Illuminate\Pagination\Cursor|null  $cursor
      * @return string
      */
-    public function url($page);
+    public function url($cursor);
 
     /**
      * Add a set of query string values to the paginator.
@@ -42,18 +42,18 @@ interface Paginator
     public function withQueryString();
 
     /**
-     * The URL for the next page, or null.
-     *
-     * @return string|null
-     */
-    public function nextPageUrl();
-
-    /**
      * Get the URL for the previous page, or null.
      *
      * @return string|null
      */
     public function previousPageUrl();
+
+    /**
+     * The URL for the next page, or null.
+     *
+     * @return string|null
+     */
+    public function nextPageUrl();
 
     /**
      * Get all of the items being paginated.
@@ -63,18 +63,18 @@ interface Paginator
     public function items();
 
     /**
-     * Get the "index" of the first item being paginated.
+     * Get the "cursor" of the previous set of items.
      *
-     * @return int|null
+     * @return \Illuminate\Pagination\Cursor|null
      */
-    public function firstItem();
+    public function previousCursor();
 
     /**
-     * Get the "index" of the last item being paginated.
+     * Get the "cursor" of the next set of items.
      *
-     * @return int|null
+     * @return \Illuminate\Pagination\Cursor|null
      */
-    public function lastItem();
+    public function nextCursor();
 
     /**
      * Determine how many items are being shown per page.
@@ -84,11 +84,11 @@ interface Paginator
     public function perPage();
 
     /**
-     * Determine the current page being paginated.
+     * Get the current cursor being paginated.
      *
-     * @return int
+     * @return \Illuminate\Pagination\Cursor|null
      */
-    public function currentPage();
+    public function cursor();
 
     /**
      * Determine if there are enough items to split into multiple pages.
@@ -98,7 +98,7 @@ interface Paginator
     public function hasPages();
 
     /**
-     * Determine if there are more items in the data store.
+     * Determine if there are more items in the data source.
      *
      * @return bool
      */
