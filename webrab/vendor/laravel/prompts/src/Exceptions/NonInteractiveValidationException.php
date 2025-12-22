@@ -4,7 +4,7 @@ namespace Laravel\Prompts\Exceptions;
 
 use RuntimeException;
 
-class FormRevertedException extends RuntimeException
+class NonInteractiveValidationException extends RuntimeException
 {
     //
 }
