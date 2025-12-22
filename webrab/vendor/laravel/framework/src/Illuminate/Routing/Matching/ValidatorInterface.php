@@ -5,7 +5,7 @@ namespace Illuminate\Routing\Matching;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Route;
 
-class UriValidator implements ValidatorInterface
+interface ValidatorInterface
 {
     /**
      * Validate a given rule against a route and request.
@@ -14,10 +14,5 @@ class UriValidator implements ValidatorInterface
      * @param  \Illuminate\Http\Request  $request
      * @return bool
      */
-    public function matches(Route $route, Request $request)
-    {
-        $path = rtrim($request->getPathInfo(), '/') ?: '/';
-
-        return preg_match($route->getCompiled()->getRegex(), rawurldecode($path));
-    }
+    public function matches(Route $route, Request $request);
 }
