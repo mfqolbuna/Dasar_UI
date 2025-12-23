@@ -10,13 +10,13 @@
 
 namespace Mockery\Generator\StringManipulation\Pass;
 
+use Mockery;
 use Mockery\Generator\MockConfiguration;
-use function array_map;
-use function implode;
+use function class_exists;
 use function ltrim;
-use function preg_replace;
+use function str_replace;
 
-class TraitPass implements Pass
+class ClassPass implements Pass
 {
     /**
      * @param  string $code
@@ -24,16 +24,26 @@ class TraitPass implements Pass
      */
     public function apply($code, MockConfiguration $config)
     {
-        $traits = $config->getTargetTraits();
+        $target = $config->getTargetClass();
 
-        if ($traits === []) {
+        if (! $target) {
             return $code;
         }
 
-        $useStatements = array_map(static function ($trait) {
-            return 'use \\\\' . ltrim($trait->getName(), '\\') . ';';
-        }, $traits);
+        if ($target->isFinal()) {
+            return $code;
+        }
 
-        return preg_replace('/^{$/m', "{\n    " . implode("\n    ", $useStatements) . "\n", $code);
+        $className = ltrim($target->getName(), '\\');
+
+        if (! class_exists($className)) {
+            Mockery::declareClass($className);
+        }
+
+        return str_replace(
+            'implements MockInterface',
+            'extends \\' . $className . ' implements MockInterface',
+            $code
+        );
     }
 }

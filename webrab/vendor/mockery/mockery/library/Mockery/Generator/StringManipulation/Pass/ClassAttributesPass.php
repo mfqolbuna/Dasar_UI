@@ -11,12 +11,10 @@
 namespace Mockery\Generator\StringManipulation\Pass;
 
 use Mockery\Generator\MockConfiguration;
-use function array_map;
 use function implode;
-use function ltrim;
-use function preg_replace;
+use function str_replace;
 
-class TraitPass implements Pass
+class ClassAttributesPass implements Pass
 {
     /**
      * @param  string $code
@@ -24,16 +22,19 @@ class TraitPass implements Pass
      */
     public function apply($code, MockConfiguration $config)
     {
-        $traits = $config->getTargetTraits();
+        $class = $config->getTargetClass();
 
-        if ($traits === []) {
+        if (! $class) {
             return $code;
         }
 
-        $useStatements = array_map(static function ($trait) {
-            return 'use \\\\' . ltrim($trait->getName(), '\\') . ';';
-        }, $traits);
+        /** @var array<string> $attributes */
+        $attributes = $class->getAttributes();
 
-        return preg_replace('/^{$/m', "{\n    " . implode("\n    ", $useStatements) . "\n", $code);
+        if ($attributes !== []) {
+            return str_replace('#[\AllowDynamicProperties]', '#[' . implode(',', $attributes) . ']', $code);
+        }
+
+        return $code;
     }
 }

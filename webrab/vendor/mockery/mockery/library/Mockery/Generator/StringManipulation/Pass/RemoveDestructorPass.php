@@ -11,12 +11,12 @@
 namespace Mockery\Generator\StringManipulation\Pass;
 
 use Mockery\Generator\MockConfiguration;
-use function array_map;
-use function implode;
-use function ltrim;
 use function preg_replace;
 
-class TraitPass implements Pass
+/**
+ * Remove mock's empty destructor if we tend to use original class destructor
+ */
+class RemoveDestructorPass implements Pass
 {
     /**
      * @param  string $code
@@ -24,16 +24,16 @@ class TraitPass implements Pass
      */
     public function apply($code, MockConfiguration $config)
     {
-        $traits = $config->getTargetTraits();
+        $target = $config->getTargetClass();
 
-        if ($traits === []) {
+        if (! $target) {
             return $code;
         }
 
-        $useStatements = array_map(static function ($trait) {
-            return 'use \\\\' . ltrim($trait->getName(), '\\') . ';';
-        }, $traits);
+        if (! $config->isMockOriginalDestructor()) {
+            return preg_replace('/public function __destruct\(\)\s+\{.*?\}/sm', '', $code);
+        }
 
-        return preg_replace('/^{$/m', "{\n    " . implode("\n    ", $useStatements) . "\n", $code);
+        return $code;
     }
 }
