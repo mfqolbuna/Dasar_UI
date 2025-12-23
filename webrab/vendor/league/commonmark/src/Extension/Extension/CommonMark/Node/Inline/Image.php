@@ -18,7 +18,7 @@ namespace League\CommonMark\Extension\CommonMark\Node\Inline;
 
 use League\CommonMark\Node\Inline\Text;
 
-class Link extends AbstractWebResource
+class Image extends AbstractWebResource
 {
     protected ?string $title = null;
 
