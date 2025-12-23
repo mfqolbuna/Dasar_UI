@@ -10,14 +10,10 @@
 
 namespace Mockery\Matcher;
 
-use function class_exists;
-use function function_exists;
-use function interface_exists;
-use function is_string;
-use function strtolower;
-use function ucfirst;
+use function array_values;
+use function implode;
 
-class Type extends MatcherAbstract
+class Contains extends MatcherAbstract
 {
     /**
      * Return a string representation of this Matcher
@@ -26,7 +22,12 @@ class Type extends MatcherAbstract
      */
     public function __toString()
     {
-        return '<' . ucfirst($this->_expected) . '>';
+        $elements = [];
+        foreach ($this->_expected as $v) {
+            $elements[] = (string) $v;
+        }
+
+        return '<Contains[' . implode(', ', $elements) . ']>';
     }
 
     /**
@@ -40,20 +41,21 @@ class Type extends MatcherAbstract
      */
     public function match(&$actual)
     {
-        $function = $this->_expected === 'real' ? 'is_float' : 'is_' . strtolower($this->_expected);
+        $values = array_values($actual);
+        foreach ($this->_expected as $exp) {
+            $match = false;
+            foreach ($values as $val) {
+                if ($exp === $val || $exp == $val) {
+                    $match = true;
+                    break;
+                }
+            }
 
-        if (function_exists($function)) {
-            return $function($actual);
+            if ($match === false) {
+                return false;
+            }
         }
 
-        if (! is_string($this->_expected)) {
-            return false;
-        }
-
-        if (class_exists($this->_expected) || interface_exists($this->_expected)) {
-            return $actual instanceof $this->_expected;
-        }
-
-        return false;
+        return true;
     }
 }

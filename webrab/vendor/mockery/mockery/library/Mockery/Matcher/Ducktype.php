@@ -10,14 +10,11 @@
 
 namespace Mockery\Matcher;
 
-use function class_exists;
-use function function_exists;
-use function interface_exists;
-use function is_string;
-use function strtolower;
-use function ucfirst;
+use function implode;
+use function is_object;
+use function method_exists;
 
-class Type extends MatcherAbstract
+class Ducktype extends MatcherAbstract
 {
     /**
      * Return a string representation of this Matcher
@@ -26,7 +23,7 @@ class Type extends MatcherAbstract
      */
     public function __toString()
     {
-        return '<' . ucfirst($this->_expected) . '>';
+        return '<Ducktype[' . implode(', ', $this->_expected) . ']>';
     }
 
     /**
@@ -40,20 +37,16 @@ class Type extends MatcherAbstract
      */
     public function match(&$actual)
     {
-        $function = $this->_expected === 'real' ? 'is_float' : 'is_' . strtolower($this->_expected);
-
-        if (function_exists($function)) {
-            return $function($actual);
-        }
-
-        if (! is_string($this->_expected)) {
+        if (! is_object($actual)) {
             return false;
         }
 
-        if (class_exists($this->_expected) || interface_exists($this->_expected)) {
-            return $actual instanceof $this->_expected;
+        foreach ($this->_expected as $method) {
+            if (! method_exists($actual, $method)) {
+                return false;
+            }
         }
 
-        return false;
+        return true;
     }
 }

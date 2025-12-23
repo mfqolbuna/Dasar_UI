@@ -10,14 +10,12 @@
 
 namespace Mockery\Matcher;
 
-use function class_exists;
-use function function_exists;
-use function interface_exists;
-use function is_string;
-use function strtolower;
-use function ucfirst;
+use ArrayAccess;
 
-class Type extends MatcherAbstract
+use function in_array;
+use function is_array;
+
+class HasValue extends MatcherAbstract
 {
     /**
      * Return a string representation of this Matcher
@@ -26,7 +24,7 @@ class Type extends MatcherAbstract
      */
     public function __toString()
     {
-        return '<' . ucfirst($this->_expected) . '>';
+        return '<HasValue[' . (string) $this->_expected . ']>';
     }
 
     /**
@@ -40,20 +38,10 @@ class Type extends MatcherAbstract
      */
     public function match(&$actual)
     {
-        $function = $this->_expected === 'real' ? 'is_float' : 'is_' . strtolower($this->_expected);
-
-        if (function_exists($function)) {
-            return $function($actual);
-        }
-
-        if (! is_string($this->_expected)) {
+        if (! is_array($actual) && ! $actual instanceof ArrayAccess) {
             return false;
         }
 
-        if (class_exists($this->_expected) || interface_exists($this->_expected)) {
-            return $actual instanceof $this->_expected;
-        }
-
-        return false;
+        return in_array($this->_expected, (array) $actual, true);
     }
 }
