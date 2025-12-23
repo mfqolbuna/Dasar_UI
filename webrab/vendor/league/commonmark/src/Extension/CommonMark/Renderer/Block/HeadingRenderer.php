@@ -16,18 +16,17 @@ declare(strict_types=1);
 
 namespace League\CommonMark\Extension\CommonMark\Renderer\Block;
 
-use League\CommonMark\Extension\CommonMark\Node\Block\FencedCode;
+use League\CommonMark\Extension\CommonMark\Node\Block\Heading;
 use League\CommonMark\Node\Node;
 use League\CommonMark\Renderer\ChildNodeRendererInterface;
 use League\CommonMark\Renderer\NodeRendererInterface;
 use League\CommonMark\Util\HtmlElement;
-use League\CommonMark\Util\Xml;
 use League\CommonMark\Xml\XmlNodeRendererInterface;
 
-final class FencedCodeRenderer implements NodeRendererInterface, XmlNodeRendererInterface
+final class HeadingRenderer implements NodeRendererInterface, XmlNodeRendererInterface
 {
     /**
-     * @param FencedCode $node
+     * @param Heading $node
      *
      * {@inheritDoc}
      *
@@ -35,34 +34,22 @@ final class FencedCodeRenderer implements NodeRendererInterface, XmlNodeRenderer
      */
     public function render(Node $node, ChildNodeRendererInterface $childRenderer): \Stringable
     {
-        FencedCode::assertInstanceOf($node);
+        Heading::assertInstanceOf($node);
 
-        $attrs = $node->data->getData('attributes');
+        $tag = 'h' . $node->getLevel();
 
-        $infoWords = $node->getInfoWords();
-        if (\count($infoWords) !== 0 && $infoWords[0] !== '') {
-            $class = $infoWords[0];
-            if (! \str_starts_with($class, 'language-')) {
-                $class = 'language-' . $class;
-            }
+        $attrs = $node->data->get('attributes');
 
-            $attrs->append('class', $class);
-        }
-
-        return new HtmlElement(
-            'pre',
-            [],
-            new HtmlElement('code', $attrs->export(), Xml::escape($node->getLiteral()))
-        );
+        return new HtmlElement($tag, $attrs, $childRenderer->renderNodes($node->children()));
     }
 
     public function getXmlTagName(Node $node): string
     {
-        return 'code_block';
+        return 'heading';
     }
 
     /**
-     * @param FencedCode $node
+     * @param Heading $node
      *
      * @return array<string, scalar>
      *
@@ -70,12 +57,8 @@ final class FencedCodeRenderer implements NodeRendererInterface, XmlNodeRenderer
      */
     public function getXmlAttributes(Node $node): array
     {
-        FencedCode::assertInstanceOf($node);
+        Heading::assertInstanceOf($node);
 
-        if (($info = $node->getInfo()) === null || $info === '') {
-            return [];
-        }
-
-        return ['info' => $info];
+        return ['level' => $node->getLevel()];
     }
 }
