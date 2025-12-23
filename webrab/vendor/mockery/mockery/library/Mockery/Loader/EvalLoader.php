@@ -12,12 +12,21 @@ namespace Mockery\Loader;
 
 use Mockery\Generator\MockDefinition;
 
-interface Loader
+use function class_exists;
+
+class EvalLoader implements Loader
 {
     /**
      * Load the given mock definition
      *
      * @return void
      */
-    public function load(MockDefinition $definition);
+    public function load(MockDefinition $definition)
+    {
+        if (class_exists($definition->getClassName(), false)) {
+            return;
+        }
+
+        eval('?>' . $definition->getCode());
+    }
 }
