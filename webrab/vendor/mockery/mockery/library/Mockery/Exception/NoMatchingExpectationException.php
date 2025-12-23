@@ -10,27 +10,15 @@
 
 namespace Mockery\Exception;
 
-use Mockery\CountValidator\Exception;
+use Mockery\Exception;
 use Mockery\LegacyMockInterface;
 
-use function in_array;
-
-class InvalidCountException extends Exception
+class NoMatchingExpectationException extends Exception
 {
     /**
-     * @var int|null
+     * @var array<mixed>
      */
-    protected $actual = null;
-
-    /**
-     * @var int
-     */
-    protected $expected = 0;
-
-    /**
-     * @var string
-     */
-    protected $expectedComparative = '<=';
+    protected $actual = [];
 
     /**
      * @var string|null
@@ -43,27 +31,11 @@ class InvalidCountException extends Exception
     protected $mockObject = null;
 
     /**
-     * @return int|null
+     * @return array<mixed>
      */
-    public function getActualCount()
+    public function getActualArguments()
     {
         return $this->actual;
-    }
-
-    /**
-     * @return int
-     */
-    public function getExpectedCount()
-    {
-        return $this->expected;
-    }
-
-    /**
-     * @return string
-     */
-    public function getExpectedCountComparative()
-    {
-        return $this->expectedComparative;
     }
 
     /**
@@ -83,7 +55,6 @@ class InvalidCountException extends Exception
     }
 
     /**
-     * @throws RuntimeException
      * @return string|null
      */
     public function getMockName()
@@ -91,43 +62,22 @@ class InvalidCountException extends Exception
         $mock = $this->getMock();
 
         if ($mock === null) {
-            return '';
+            return $mock;
         }
 
         return $mock->mockery_getName();
     }
 
     /**
-     * @param  int  $count
+     * @todo Rename param `count` to `args`
+     * @template TMixed
+     *
+     * @param  array<TMixed> $count
      * @return self
      */
-    public function setActualCount($count)
+    public function setActualArguments($count)
     {
         $this->actual = $count;
-        return $this;
-    }
-
-    /**
-     * @param  int  $count
-     * @return self
-     */
-    public function setExpectedCount($count)
-    {
-        $this->expected = $count;
-        return $this;
-    }
-
-    /**
-     * @param  string $comp
-     * @return self
-     */
-    public function setExpectedCountComparative($comp)
-    {
-        if (! in_array($comp, ['=', '>', '<', '>=', '<='], true)) {
-            throw new RuntimeException('Illegal comparative for expected call counts set: ' . $comp);
-        }
-
-        $this->expectedComparative = $comp;
         return $this;
     }
 
