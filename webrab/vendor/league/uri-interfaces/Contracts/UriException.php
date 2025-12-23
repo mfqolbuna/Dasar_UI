@@ -13,14 +13,8 @@ declare(strict_types=1);
 
 namespace League\Uri\Contracts;
 
-use Psr\Http\Message\UriInterface as Psr7UriInterface;
+use Throwable;
 
-interface UriAccess
+interface UriException extends Throwable
 {
-    public function getUri(): UriInterface|Psr7UriInterface;
-
-    /**
-     * Returns the RFC3986 string representation of the complete URI.
-     */
-    public function getUriString(): string;
 }
