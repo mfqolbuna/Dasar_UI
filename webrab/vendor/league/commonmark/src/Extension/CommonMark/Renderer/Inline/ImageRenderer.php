@@ -16,8 +16,11 @@ declare(strict_types=1);
 
 namespace League\CommonMark\Extension\CommonMark\Renderer\Inline;
 
-use League\CommonMark\Extension\CommonMark\Node\Inline\Link;
+use League\CommonMark\Extension\CommonMark\Node\Inline\Image;
+use League\CommonMark\Node\Inline\Newline;
 use League\CommonMark\Node\Node;
+use League\CommonMark\Node\NodeIterator;
+use League\CommonMark\Node\StringContainerInterface;
 use League\CommonMark\Renderer\ChildNodeRendererInterface;
 use League\CommonMark\Renderer\NodeRendererInterface;
 use League\CommonMark\Util\HtmlElement;
@@ -26,13 +29,13 @@ use League\CommonMark\Xml\XmlNodeRendererInterface;
 use League\Config\ConfigurationAwareInterface;
 use League\Config\ConfigurationInterface;
 
-final class LinkRenderer implements NodeRendererInterface, XmlNodeRendererInterface, ConfigurationAwareInterface
+final class ImageRenderer implements NodeRendererInterface, XmlNodeRendererInterface, ConfigurationAwareInterface
 {
     /** @psalm-readonly-allow-private-mutation */
     private ConfigurationInterface $config;
 
     /**
-     * @param Link $node
+     * @param Image $node
      *
      * {@inheritDoc}
      *
@@ -40,24 +43,24 @@ final class LinkRenderer implements NodeRendererInterface, XmlNodeRendererInterf
      */
     public function render(Node $node, ChildNodeRendererInterface $childRenderer): \Stringable
     {
-        Link::assertInstanceOf($node);
+        Image::assertInstanceOf($node);
 
         $attrs = $node->data->get('attributes');
 
         $forbidUnsafeLinks = ! $this->config->get('allow_unsafe_links');
-        if (! ($forbidUnsafeLinks && RegexHelper::isLinkPotentiallyUnsafe($node->getUrl()))) {
-            $attrs['href'] = $node->getUrl();
+        if ($forbidUnsafeLinks && RegexHelper::isLinkPotentiallyUnsafe($node->getUrl())) {
+            $attrs['src'] = '';
+        } else {
+            $attrs['src'] = $node->getUrl();
         }
+
+        $attrs['alt'] = $this->getAltText($node);
 
         if (($title = $node->getTitle()) !== null) {
             $attrs['title'] = $title;
         }
 
-        if (isset($attrs['target']) && $attrs['target'] === '_blank' && ! isset($attrs['rel'])) {
-            $attrs['rel'] = 'noopener noreferrer';
-        }
-
-        return new HtmlElement('a', $attrs, $childRenderer->renderNodes($node->children()));
+        return new HtmlElement('img', $attrs, '', true);
     }
 
     public function setConfiguration(ConfigurationInterface $configuration): void
@@ -67,11 +70,11 @@ final class LinkRenderer implements NodeRendererInterface, XmlNodeRendererInterf
 
     public function getXmlTagName(Node $node): string
     {
-        return 'link';
+        return 'image';
     }
 
     /**
-     * @param Link $node
+     * @param Image $node
      *
      * @return array<string, scalar>
      *
@@ -79,11 +82,26 @@ final class LinkRenderer implements NodeRendererInterface, XmlNodeRendererInterf
      */
     public function getXmlAttributes(Node $node): array
     {
-        Link::assertInstanceOf($node);
+        Image::assertInstanceOf($node);
 
         return [
             'destination' => $node->getUrl(),
             'title' => $node->getTitle() ?? '',
         ];
+    }
+
+    private function getAltText(Image $node): string
+    {
+        $altText = '';
+
+        foreach ((new NodeIterator($node)) as $n) {
+            if ($n instanceof StringContainerInterface) {
+                $altText .= $n->getLiteral();
+            } elseif ($n instanceof Newline) {
+                $altText .= "\n";
+            }
+        }
+
+        return $altText;
     }
 }
