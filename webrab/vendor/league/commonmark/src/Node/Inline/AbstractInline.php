@@ -16,10 +16,8 @@ declare(strict_types=1);
 
 namespace League\CommonMark\Node\Inline;
 
-final class Text extends AbstractStringContainer
+use League\CommonMark\Node\Node;
+
+abstract class AbstractInline extends Node
 {
-    public function append(string $literal): void
-    {
-        $this->literal .= $literal;
-    }
 }
