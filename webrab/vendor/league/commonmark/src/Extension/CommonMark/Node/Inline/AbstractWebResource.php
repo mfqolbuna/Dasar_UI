@@ -16,8 +16,26 @@ declare(strict_types=1);
 
 namespace League\CommonMark\Extension\CommonMark\Node\Inline;
 
-use League\CommonMark\Node\Inline\AbstractStringContainer;
+use League\CommonMark\Node\Inline\AbstractInline;
 
-class Code extends AbstractStringContainer
+abstract class AbstractWebResource extends AbstractInline
 {
+    protected string $url;
+
+    public function __construct(string $url)
+    {
+        parent::__construct();
+
+        $this->url = $url;
+    }
+
+    public function getUrl(): string
+    {
+        return $this->url;
+    }
+
+    public function setUrl(string $url): void
+    {
+        $this->url = $url;
+    }
 }
