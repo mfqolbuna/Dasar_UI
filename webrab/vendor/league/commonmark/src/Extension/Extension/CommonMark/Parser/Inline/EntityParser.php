@@ -20,24 +20,22 @@ use League\CommonMark\Node\Inline\Text;
 use League\CommonMark\Parser\Inline\InlineParserInterface;
 use League\CommonMark\Parser\Inline\InlineParserMatch;
 use League\CommonMark\Parser\InlineParserContext;
+use League\CommonMark\Util\Html5EntityDecoder;
+use League\CommonMark\Util\RegexHelper;
 
-final class BangParser implements InlineParserInterface
+final class EntityParser implements InlineParserInterface
 {
     public function getMatchDefinition(): InlineParserMatch
     {
-        return InlineParserMatch::string('![');
+        return InlineParserMatch::regex(RegexHelper::PARTIAL_ENTITY);
     }
 
     public function parse(InlineParserContext $inlineContext): bool
     {
-        $cursor = $inlineContext->getCursor();
-        $cursor->advanceBy(2);
+        $entity = $inlineContext->getFullMatch();
 
-        $node = new Text('![', ['delim' => true]);
-        $inlineContext->getContainer()->appendChild($node);
-
-        // Add entry to stack for this opener
-        $inlineContext->getDelimiterStack()->addBracket($node, $cursor->getPosition(), true);
+        $inlineContext->getCursor()->advanceBy($inlineContext->getFullMatchLength());
+        $inlineContext->getContainer()->appendChild(new Text(Html5EntityDecoder::decode($entity)));
 
         return true;
     }

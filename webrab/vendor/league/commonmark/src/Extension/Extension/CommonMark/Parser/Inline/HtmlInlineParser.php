@@ -16,28 +16,25 @@ declare(strict_types=1);
 
 namespace League\CommonMark\Extension\CommonMark\Parser\Inline;
 
-use League\CommonMark\Node\Inline\Text;
+use League\CommonMark\Extension\CommonMark\Node\Inline\HtmlInline;
 use League\CommonMark\Parser\Inline\InlineParserInterface;
 use League\CommonMark\Parser\Inline\InlineParserMatch;
 use League\CommonMark\Parser\InlineParserContext;
+use League\CommonMark\Util\RegexHelper;
 
-final class BangParser implements InlineParserInterface
+final class HtmlInlineParser implements InlineParserInterface
 {
     public function getMatchDefinition(): InlineParserMatch
     {
-        return InlineParserMatch::string('![');
+        return InlineParserMatch::regex(RegexHelper::PARTIAL_HTMLTAG)->caseSensitive();
     }
 
     public function parse(InlineParserContext $inlineContext): bool
     {
-        $cursor = $inlineContext->getCursor();
-        $cursor->advanceBy(2);
+        $inline = $inlineContext->getFullMatch();
 
-        $node = new Text('![', ['delim' => true]);
-        $inlineContext->getContainer()->appendChild($node);
-
-        // Add entry to stack for this opener
-        $inlineContext->getDelimiterStack()->addBracket($node, $cursor->getPosition(), true);
+        $inlineContext->getCursor()->advanceBy($inlineContext->getFullMatchLength());
+        $inlineContext->getContainer()->appendChild(new HtmlInline($inline));
 
         return true;
     }
