@@ -16,17 +16,26 @@ declare(strict_types=1);
 
 namespace League\CommonMark\Renderer\Inline;
 
-use League\CommonMark\Node\Inline\Text;
+use League\CommonMark\Node\Inline\Newline;
 use League\CommonMark\Node\Node;
 use League\CommonMark\Renderer\ChildNodeRendererInterface;
 use League\CommonMark\Renderer\NodeRendererInterface;
-use League\CommonMark\Util\Xml;
 use League\CommonMark\Xml\XmlNodeRendererInterface;
+use League\Config\ConfigurationAwareInterface;
+use League\Config\ConfigurationInterface;
 
-final class TextRenderer implements NodeRendererInterface, XmlNodeRendererInterface
+final class NewlineRenderer implements NodeRendererInterface, XmlNodeRendererInterface, ConfigurationAwareInterface
 {
+    /** @psalm-readonly-allow-private-mutation */
+    private ConfigurationInterface $config;
+
+    public function setConfiguration(ConfigurationInterface $configuration): void
+    {
+        $this->config = $configuration;
+    }
+
     /**
-     * @param Text $node
+     * @param Newline $node
      *
      * {@inheritDoc}
      *
@@ -34,14 +43,27 @@ final class TextRenderer implements NodeRendererInterface, XmlNodeRendererInterf
      */
     public function render(Node $node, ChildNodeRendererInterface $childRenderer): string
     {
-        Text::assertInstanceOf($node);
+        Newline::assertInstanceOf($node);
 
-        return Xml::escape($node->getLiteral());
+        if ($node->getType() === Newline::HARDBREAK) {
+            return "<br />\n";
+        }
+
+        return $this->config->get('renderer/soft_break');
     }
 
+    /**
+     * @param Newline $node
+     *
+     * {@inheritDoc}
+     *
+     * @psalm-suppress MoreSpecificImplementedParamType
+     */
     public function getXmlTagName(Node $node): string
     {
-        return 'text';
+        Newline::assertInstanceOf($node);
+
+        return $node->getType() === Newline::SOFTBREAK ? 'softbreak' : 'linebreak';
     }
 
     /**
