@@ -18,7 +18,7 @@ use League\CommonMark\Node\Node;
 /**
  * @internal
  */
-final class OrExpr implements ExpressionInterface
+final class AndExpr implements ExpressionInterface
 {
     /**
      * @var callable[]
@@ -45,11 +45,11 @@ final class OrExpr implements ExpressionInterface
     public function __invoke(Node $node): bool
     {
         foreach ($this->conditions as $condition) {
-            if ($condition($node)) {
-                return true;
+            if (! $condition($node)) {
+                return false;
             }
         }
 
-        return false;
+        return true;
     }
 }
