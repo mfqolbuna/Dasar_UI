@@ -13,39 +13,30 @@ declare(strict_types=1);
 
 namespace League\CommonMark\Extension\CommonMark\Parser\Block;
 
-use League\CommonMark\Extension\CommonMark\Node\Block\Heading;
+use League\CommonMark\Extension\CommonMark\Node\Block\ThematicBreak;
 use League\CommonMark\Parser\Block\AbstractBlockContinueParser;
 use League\CommonMark\Parser\Block\BlockContinue;
 use League\CommonMark\Parser\Block\BlockContinueParserInterface;
-use League\CommonMark\Parser\Block\BlockContinueParserWithInlinesInterface;
 use League\CommonMark\Parser\Cursor;
-use League\CommonMark\Parser\InlineParserEngineInterface;
 
-final class HeadingParser extends AbstractBlockContinueParser implements BlockContinueParserWithInlinesInterface
+final class ThematicBreakParser extends AbstractBlockContinueParser
 {
     /** @psalm-readonly */
-    private Heading $block;
+    private ThematicBreak $block;
 
-    private string $content;
-
-    public function __construct(int $level, string $content)
+    public function __construct()
     {
-        $this->block   = new Heading($level);
-        $this->content = $content;
+        $this->block = new ThematicBreak();
     }
 
-    public function getBlock(): Heading
+    public function getBlock(): ThematicBreak
     {
         return $this->block;
     }
 
     public function tryContinue(Cursor $cursor, BlockContinueParserInterface $activeBlockParser): ?BlockContinue
     {
+        // a horizontal rule can never container > 1 line, so fail to match
         return BlockContinue::none();
-    }
-
-    public function parseInlines(InlineParserEngineInterface $inlineParser): void
-    {
-        $inlineParser->parse($this->content, $this->block);
     }
 }
