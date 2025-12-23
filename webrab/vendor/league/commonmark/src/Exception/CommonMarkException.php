@@ -13,6 +13,9 @@ declare(strict_types=1);
 
 namespace League\CommonMark\Exception;
 
-class IOException extends \RuntimeException implements CommonMarkException
+/**
+ * Marker interface for all exceptions thrown by this library.
+ */
+interface CommonMarkException extends \Throwable
 {
 }
