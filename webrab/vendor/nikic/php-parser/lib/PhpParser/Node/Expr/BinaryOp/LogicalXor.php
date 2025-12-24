@@ -4,12 +4,12 @@ namespace PhpParser\Node\Expr\BinaryOp;
 
 use PhpParser\Node\Expr\BinaryOp;
 
-class Div extends BinaryOp {
+class LogicalXor extends BinaryOp {
     public function getOperatorSigil(): string {
-        return '/';
+        return 'xor';
     }
 
     public function getType(): string {
-        return 'Expr_BinaryOp_Div';
+        return 'Expr_BinaryOp_LogicalXor';
     }
 }
