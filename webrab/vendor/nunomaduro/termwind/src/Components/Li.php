@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Termwind\Components;
 
-final class Dl extends Element
+final class Li extends Element
 {
     protected static array $defaultStyles = ['block'];
 }
