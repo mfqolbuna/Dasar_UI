@@ -21,7 +21,7 @@ use PHPUnit\Event\Telemetry;
  *
  * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
  */
-final readonly class NoticeTriggered implements Event
+final readonly class ErrorTriggered implements Event
 {
     private Telemetry\Info $telemetryInfo;
     private Test $test;
@@ -41,22 +41,20 @@ final readonly class NoticeTriggered implements Event
      */
     private int $line;
     private bool $suppressed;
-    private bool $ignoredByBaseline;
 
     /**
      * @param non-empty-string $message
      * @param non-empty-string $file
      * @param positive-int     $line
      */
-    public function __construct(Telemetry\Info $telemetryInfo, Test $test, string $message, string $file, int $line, bool $suppressed, bool $ignoredByBaseline)
+    public function __construct(Telemetry\Info $telemetryInfo, Test $test, string $message, string $file, int $line, bool $suppressed)
     {
-        $this->telemetryInfo     = $telemetryInfo;
-        $this->test              = $test;
-        $this->message           = $message;
-        $this->file              = $file;
-        $this->line              = $line;
-        $this->suppressed        = $suppressed;
-        $this->ignoredByBaseline = $ignoredByBaseline;
+        $this->telemetryInfo = $telemetryInfo;
+        $this->test          = $test;
+        $this->message       = $message;
+        $this->file          = $file;
+        $this->line          = $line;
+        $this->suppressed    = $suppressed;
     }
 
     public function telemetryInfo(): Telemetry\Info
@@ -98,11 +96,6 @@ final readonly class NoticeTriggered implements Event
         return $this->suppressed;
     }
 
-    public function ignoredByBaseline(): bool
-    {
-        return $this->ignoredByBaseline;
-    }
-
     public function asString(): string
     {
         $message = $this->message;
@@ -117,12 +110,8 @@ final readonly class NoticeTriggered implements Event
             $details[] = 'suppressed using operator';
         }
 
-        if ($this->ignoredByBaseline) {
-            $details[] = 'ignored by baseline';
-        }
-
         return sprintf(
-            'Test Triggered Notice (%s) in %s:%d%s',
+            'Test Triggered Error (%s) in %s:%d%s',
             implode(', ', $details),
             $this->file,
             $this->line,

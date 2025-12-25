@@ -21,7 +21,7 @@ use PHPUnit\Event\Telemetry;
  *
  * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
  */
-final readonly class NoticeTriggered implements Event
+final readonly class PhpWarningTriggered implements Event
 {
     private Telemetry\Info $telemetryInfo;
     private Test $test;
@@ -122,7 +122,7 @@ final readonly class NoticeTriggered implements Event
         }
 
         return sprintf(
-            'Test Triggered Notice (%s) in %s:%d%s',
+            'Test Triggered PHP Warning (%s) in %s:%d%s',
             implode(', ', $details),
             $this->file,
             $this->line,

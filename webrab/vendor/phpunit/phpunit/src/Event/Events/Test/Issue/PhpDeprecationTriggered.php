@@ -12,6 +12,7 @@ namespace PHPUnit\Event\Test;
 use const PHP_EOL;
 use function implode;
 use function sprintf;
+use PHPUnit\Event\Code\IssueTrigger\IssueTrigger;
 use PHPUnit\Event\Code\Test;
 use PHPUnit\Event\Event;
 use PHPUnit\Event\Telemetry;
@@ -21,7 +22,7 @@ use PHPUnit\Event\Telemetry;
  *
  * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
  */
-final readonly class NoticeTriggered implements Event
+final readonly class PhpDeprecationTriggered implements Event
 {
     private Telemetry\Info $telemetryInfo;
     private Test $test;
@@ -42,13 +43,15 @@ final readonly class NoticeTriggered implements Event
     private int $line;
     private bool $suppressed;
     private bool $ignoredByBaseline;
+    private bool $ignoredByTest;
+    private IssueTrigger $trigger;
 
     /**
      * @param non-empty-string $message
      * @param non-empty-string $file
      * @param positive-int     $line
      */
-    public function __construct(Telemetry\Info $telemetryInfo, Test $test, string $message, string $file, int $line, bool $suppressed, bool $ignoredByBaseline)
+    public function __construct(Telemetry\Info $telemetryInfo, Test $test, string $message, string $file, int $line, bool $suppressed, bool $ignoredByBaseline, bool $ignoredByTest, IssueTrigger $trigger)
     {
         $this->telemetryInfo     = $telemetryInfo;
         $this->test              = $test;
@@ -57,6 +60,8 @@ final readonly class NoticeTriggered implements Event
         $this->line              = $line;
         $this->suppressed        = $suppressed;
         $this->ignoredByBaseline = $ignoredByBaseline;
+        $this->ignoredByTest     = $ignoredByTest;
+        $this->trigger           = $trigger;
     }
 
     public function telemetryInfo(): Telemetry\Info
@@ -103,6 +108,16 @@ final readonly class NoticeTriggered implements Event
         return $this->ignoredByBaseline;
     }
 
+    public function ignoredByTest(): bool
+    {
+        return $this->ignoredByTest;
+    }
+
+    public function trigger(): IssueTrigger
+    {
+        return $this->trigger;
+    }
+
     public function asString(): string
     {
         $message = $this->message;
@@ -111,10 +126,14 @@ final readonly class NoticeTriggered implements Event
             $message = PHP_EOL . $message;
         }
 
-        $details = [$this->test->id()];
+        $details = [$this->test->id(), $this->trigger->asString()];
 
         if ($this->suppressed) {
             $details[] = 'suppressed using operator';
+        }
+
+        if ($this->ignoredByTest) {
+            $details[] = 'ignored by test';
         }
 
         if ($this->ignoredByBaseline) {
@@ -122,7 +141,7 @@ final readonly class NoticeTriggered implements Event
         }
 
         return sprintf(
-            'Test Triggered Notice (%s) in %s:%d%s',
+            'Test Triggered PHP Deprecation (%s) in %s:%d%s',
             implode(', ', $details),
             $this->file,
             $this->line,
