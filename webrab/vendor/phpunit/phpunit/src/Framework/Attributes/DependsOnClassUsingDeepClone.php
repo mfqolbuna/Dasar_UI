@@ -16,18 +16,27 @@ use Attribute;
  *
  * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
  */
-#[Attribute(Attribute::TARGET_METHOD)]
-final readonly class After
+#[Attribute(Attribute::TARGET_METHOD | Attribute::IS_REPEATABLE)]
+final readonly class DependsOnClassUsingDeepClone
 {
-    private int $priority;
+    /**
+     * @var class-string
+     */
+    private string $className;
 
-    public function __construct(int $priority = 0)
+    /**
+     * @param class-string $className
+     */
+    public function __construct(string $className)
     {
-        $this->priority = $priority;
+        $this->className = $className;
     }
 
-    public function priority(): int
+    /**
+     * @return class-string
+     */
+    public function className(): string
     {
-        return $this->priority;
+        return $this->className;
     }
 }

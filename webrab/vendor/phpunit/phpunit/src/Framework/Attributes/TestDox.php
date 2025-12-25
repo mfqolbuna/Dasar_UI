@@ -16,18 +16,27 @@ use Attribute;
  *
  * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
  */
-#[Attribute(Attribute::TARGET_METHOD)]
-final readonly class After
+#[Attribute(Attribute::TARGET_CLASS | Attribute::TARGET_METHOD)]
+final readonly class TestDox
 {
-    private int $priority;
+    /**
+     * @var non-empty-string
+     */
+    private string $text;
 
-    public function __construct(int $priority = 0)
+    /**
+     * @param non-empty-string $text
+     */
+    public function __construct(string $text)
     {
-        $this->priority = $priority;
+        $this->text = $text;
     }
 
-    public function priority(): int
+    /**
+     * @return non-empty-string
+     */
+    public function text(): string
     {
-        return $this->priority;
+        return $this->text;
     }
 }

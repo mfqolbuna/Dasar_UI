@@ -16,18 +16,18 @@ use Attribute;
  *
  * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
  */
-#[Attribute(Attribute::TARGET_METHOD)]
-final readonly class After
+#[Attribute(Attribute::TARGET_CLASS | Attribute::TARGET_METHOD)]
+final readonly class PreserveGlobalState
 {
-    private int $priority;
+    private bool $enabled;
 
-    public function __construct(int $priority = 0)
+    public function __construct(bool $enabled)
     {
-        $this->priority = $priority;
+        $this->enabled = $enabled;
     }
 
-    public function priority(): int
+    public function enabled(): bool
     {
-        return $this->priority;
+        return $this->enabled;
     }
 }

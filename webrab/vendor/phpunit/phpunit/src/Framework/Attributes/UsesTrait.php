@@ -16,18 +16,27 @@ use Attribute;
  *
  * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
  */
-#[Attribute(Attribute::TARGET_METHOD)]
-final readonly class After
+#[Attribute(Attribute::TARGET_CLASS | Attribute::IS_REPEATABLE)]
+final readonly class UsesTrait
 {
-    private int $priority;
+    /**
+     * @var trait-string
+     */
+    private string $traitName;
 
-    public function __construct(int $priority = 0)
+    /**
+     * @param trait-string $traitName
+     */
+    public function __construct(string $traitName)
     {
-        $this->priority = $priority;
+        $this->traitName = $traitName;
     }
 
-    public function priority(): int
+    /**
+     * @return trait-string
+     */
+    public function traitName(): string
     {
-        return $this->priority;
+        return $this->traitName;
     }
 }

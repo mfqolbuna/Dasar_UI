@@ -16,18 +16,27 @@ use Attribute;
  *
  * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
  */
-#[Attribute(Attribute::TARGET_METHOD)]
-final readonly class After
+#[Attribute(Attribute::TARGET_CLASS | Attribute::IS_REPEATABLE)]
+final readonly class UsesFunction
 {
-    private int $priority;
+    /**
+     * @var non-empty-string
+     */
+    private string $functionName;
 
-    public function __construct(int $priority = 0)
+    /**
+     * @param non-empty-string $functionName
+     */
+    public function __construct(string $functionName)
     {
-        $this->priority = $priority;
+        $this->functionName = $functionName;
     }
 
-    public function priority(): int
+    /**
+     * @return non-empty-string
+     */
+    public function functionName(): string
     {
-        return $this->priority;
+        return $this->functionName;
     }
 }

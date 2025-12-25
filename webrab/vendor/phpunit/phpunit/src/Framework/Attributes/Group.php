@@ -16,18 +16,27 @@ use Attribute;
  *
  * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
  */
-#[Attribute(Attribute::TARGET_METHOD)]
-final readonly class After
+#[Attribute(Attribute::TARGET_CLASS | Attribute::TARGET_METHOD | Attribute::IS_REPEATABLE)]
+final readonly class Group
 {
-    private int $priority;
+    /**
+     * @var non-empty-string
+     */
+    private string $name;
 
-    public function __construct(int $priority = 0)
+    /**
+     * @param non-empty-string $name
+     */
+    public function __construct(string $name)
     {
-        $this->priority = $priority;
+        $this->name = $name;
     }
 
-    public function priority(): int
+    /**
+     * @return non-empty-string
+     */
+    public function name(): string
     {
-        return $this->priority;
+        return $this->name;
     }
 }
