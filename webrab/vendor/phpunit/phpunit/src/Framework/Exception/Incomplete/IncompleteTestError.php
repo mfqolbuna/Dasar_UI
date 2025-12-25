@@ -9,13 +9,11 @@
  */
 namespace PHPUnit\Framework;
 
-use Throwable;
-
 /**
  * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
  *
  * @internal This class is not covered by the backward compatibility promise for PHPUnit
  */
-interface IncompleteTest extends Throwable
+final class IncompleteTestError extends AssertionFailedError implements IncompleteTest
 {
 }
