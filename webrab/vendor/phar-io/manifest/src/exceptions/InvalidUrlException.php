@@ -10,7 +10,7 @@
  */
 namespace PharIo\Manifest;
 
-use Throwable;
+use InvalidArgumentException;
 
-interface Exception extends Throwable {
+class InvalidUrlException extends InvalidArgumentException implements Exception {
 }

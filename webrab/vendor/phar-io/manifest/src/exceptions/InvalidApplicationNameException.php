@@ -10,7 +10,8 @@
  */
 namespace PharIo\Manifest;
 
-use Throwable;
+use InvalidArgumentException;
 
-interface Exception extends Throwable {
+class InvalidApplicationNameException extends InvalidArgumentException implements Exception {
+    public const InvalidFormat = 2;
 }

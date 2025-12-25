@@ -10,7 +10,5 @@
  */
 namespace PharIo\Manifest;
 
-use Throwable;
-
-interface Exception extends Throwable {
+class ManifestLoaderException extends \Exception implements Exception {
 }

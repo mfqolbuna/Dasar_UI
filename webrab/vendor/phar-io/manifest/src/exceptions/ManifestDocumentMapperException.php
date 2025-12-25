@@ -10,7 +10,7 @@
  */
 namespace PharIo\Manifest;
 
-use Throwable;
+use RuntimeException;
 
-interface Exception extends Throwable {
+class ManifestDocumentMapperException extends RuntimeException implements Exception {
 }
