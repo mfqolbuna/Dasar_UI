@@ -9,8 +9,12 @@
  */
 namespace SebastianBergmann\CodeCoverage;
 
-use Throwable;
+use RuntimeException;
 
-interface Exception extends Throwable
+final class ReportAlreadyFinalizedException extends RuntimeException implements Exception
 {
+    public function __construct()
+    {
+        parent::__construct('The code coverage report has already been finalized');
+    }
 }

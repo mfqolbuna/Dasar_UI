@@ -9,8 +9,12 @@
  */
 namespace SebastianBergmann\CodeCoverage;
 
-use Throwable;
+use RuntimeException;
 
-interface Exception extends Throwable
+final class NoCodeCoverageDriverWithPathCoverageSupportAvailableException extends RuntimeException implements Exception
 {
+    public function __construct()
+    {
+        parent::__construct('No code coverage driver with path coverage support available');
+    }
 }

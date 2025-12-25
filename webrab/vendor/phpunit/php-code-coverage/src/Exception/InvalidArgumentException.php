@@ -9,8 +9,6 @@
  */
 namespace SebastianBergmann\CodeCoverage;
 
-use Throwable;
-
-interface Exception extends Throwable
+final class InvalidArgumentException extends \InvalidArgumentException implements Exception
 {
 }

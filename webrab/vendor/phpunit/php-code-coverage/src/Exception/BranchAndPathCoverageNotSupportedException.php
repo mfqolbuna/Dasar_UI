@@ -9,8 +9,8 @@
  */
 namespace SebastianBergmann\CodeCoverage;
 
-use Throwable;
+use RuntimeException;
 
-interface Exception extends Throwable
+final class BranchAndPathCoverageNotSupportedException extends RuntimeException implements Exception
 {
 }
