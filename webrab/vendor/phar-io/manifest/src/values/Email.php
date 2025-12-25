@@ -10,29 +10,26 @@
  */
 namespace PharIo\Manifest;
 
-use const FILTER_VALIDATE_URL;
+use const FILTER_VALIDATE_EMAIL;
 use function filter_var;
 
-class Url {
+class Email {
     /** @var string */
-    private $url;
+    private $email;
 
-    public function __construct(string $url) {
-        $this->ensureUrlIsValid($url);
+    public function __construct(string $email) {
+        $this->ensureEmailIsValid($email);
 
-        $this->url = $url;
+        $this->email = $email;
     }
 
     public function asString(): string {
-        return $this->url;
+        return $this->email;
     }
 
-    /**
-     * @throws InvalidUrlException
-     */
-    private function ensureUrlIsValid(string $url): void {
-        if (filter_var($url, FILTER_VALIDATE_URL) === false) {
-            throw new InvalidUrlException;
+    private function ensureEmailIsValid(string $url): void {
+        if (filter_var($url, FILTER_VALIDATE_EMAIL) === false) {
+            throw new InvalidEmailException;
         }
     }
 }

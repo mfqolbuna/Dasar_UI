@@ -10,29 +10,15 @@
  */
 namespace PharIo\Manifest;
 
-use const FILTER_VALIDATE_URL;
-use function filter_var;
-
-class Url {
+class PhpExtensionRequirement implements Requirement {
     /** @var string */
-    private $url;
+    private $extension;
 
-    public function __construct(string $url) {
-        $this->ensureUrlIsValid($url);
-
-        $this->url = $url;
+    public function __construct(string $extension) {
+        $this->extension = $extension;
     }
 
     public function asString(): string {
-        return $this->url;
-    }
-
-    /**
-     * @throws InvalidUrlException
-     */
-    private function ensureUrlIsValid(string $url): void {
-        if (filter_var($url, FILTER_VALIDATE_URL) === false) {
-            throw new InvalidUrlException;
-        }
+        return $this->extension;
     }
 }
