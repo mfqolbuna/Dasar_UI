@@ -10,8 +10,10 @@
  */
 namespace PharIo\Manifest;
 
-class ExtElement extends ManifestElement {
-    public function getName(): string {
-        return $this->getAttributeValue('name');
+class RequiresElement extends ManifestElement {
+    public function getPHPElement(): PhpElement {
+        return new PhpElement(
+            $this->getChildByName('php')
+        );
     }
 }

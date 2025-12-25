@@ -10,8 +10,12 @@
  */
 namespace PharIo\Manifest;
 
-class ExtElement extends ManifestElement {
-    public function getName(): string {
-        return $this->getAttributeValue('name');
+class ExtensionElement extends ManifestElement {
+    public function getFor(): string {
+        return $this->getAttributeValue('for');
+    }
+
+    public function getCompatible(): string {
+        return $this->getAttributeValue('compatible');
     }
 }

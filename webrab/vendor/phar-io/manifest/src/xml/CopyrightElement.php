@@ -10,8 +10,16 @@
  */
 namespace PharIo\Manifest;
 
-class ExtElement extends ManifestElement {
-    public function getName(): string {
-        return $this->getAttributeValue('name');
+class CopyrightElement extends ManifestElement {
+    public function getAuthorElements(): AuthorElementCollection {
+        return new AuthorElementCollection(
+            $this->getChildrenByName('author')
+        );
+    }
+
+    public function getLicenseElement(): LicenseElement {
+        return new LicenseElement(
+            $this->getChildByName('license')
+        );
     }
 }
