@@ -12,14 +12,14 @@ namespace PHPUnit\Framework\Constraint;
 /**
  * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
  */
-final class IsTrue extends Constraint
+final class IsFalse extends Constraint
 {
     /**
      * Returns a string representation of the constraint.
      */
     public function toString(): string
     {
-        return 'is true';
+        return 'is false';
     }
 
     /**
@@ -28,6 +28,6 @@ final class IsTrue extends Constraint
      */
     protected function matches(mixed $other): bool
     {
-        return $other === true;
+        return $other === false;
     }
 }
