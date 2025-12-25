@@ -9,19 +9,19 @@
  */
 namespace PHPUnit\Framework\Constraint;
 
-use function is_nan;
+use function is_finite;
 
 /**
  * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
  */
-final class IsNan extends Constraint
+final class IsFinite extends Constraint
 {
     /**
      * Returns a string representation of the constraint.
      */
     public function toString(): string
     {
-        return 'is nan';
+        return 'is finite';
     }
 
     /**
@@ -30,6 +30,6 @@ final class IsNan extends Constraint
      */
     protected function matches(mixed $other): bool
     {
-        return is_nan($other);
+        return is_finite($other);
     }
 }
