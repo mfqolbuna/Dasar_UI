@@ -9,20 +9,29 @@
  */
 namespace PHPUnit\Framework\Constraint;
 
-use function array_is_list;
+use function array_key_exists;
 use function is_array;
+use ArrayAccess;
+use PHPUnit\Util\Exporter;
 
 /**
  * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
  */
-final class IsList extends Constraint
+final class ArrayHasKey extends Constraint
 {
+    private readonly mixed $key;
+
+    public function __construct(mixed $key)
+    {
+        $this->key = $key;
+    }
+
     /**
      * Returns a string representation of the constraint.
      */
     public function toString(): string
     {
-        return 'is a list';
+        return 'has the key ' . Exporter::export($this->key);
     }
 
     /**
@@ -31,11 +40,15 @@ final class IsList extends Constraint
      */
     protected function matches(mixed $other): bool
     {
-        if (!is_array($other)) {
-            return false;
+        if (is_array($other)) {
+            return array_key_exists($this->key, $other);
         }
 
-        return array_is_list($other);
+        if ($other instanceof ArrayAccess) {
+            return $other->offsetExists($this->key);
+        }
+
+        return false;
     }
 
     /**
@@ -46,6 +59,6 @@ final class IsList extends Constraint
      */
     protected function failureDescription(mixed $other): string
     {
-        return $this->valueToTypeStringFragment($other) . $this->toString();
+        return 'an array ' . $this->toString();
     }
 }

@@ -9,33 +9,28 @@
  */
 namespace PHPUnit\Framework\Constraint;
 
-use function array_is_list;
 use function is_array;
+use function sprintf;
+use PHPUnit\Util\Exporter;
 
 /**
  * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
  */
-final class IsList extends Constraint
+abstract class TraversableContains extends Constraint
 {
+    private readonly mixed $value;
+
+    public function __construct(mixed $value)
+    {
+        $this->value = $value;
+    }
+
     /**
      * Returns a string representation of the constraint.
      */
     public function toString(): string
     {
-        return 'is a list';
-    }
-
-    /**
-     * Evaluates the constraint for parameter $other. Returns true if the
-     * constraint is met, false otherwise.
-     */
-    protected function matches(mixed $other): bool
-    {
-        if (!is_array($other)) {
-            return false;
-        }
-
-        return array_is_list($other);
+        return 'contains ' . Exporter::export($this->value);
     }
 
     /**
@@ -46,6 +41,15 @@ final class IsList extends Constraint
      */
     protected function failureDescription(mixed $other): string
     {
-        return $this->valueToTypeStringFragment($other) . $this->toString();
+        return sprintf(
+            '%s %s',
+            is_array($other) ? 'an array' : 'a traversable',
+            $this->toString(),
+        );
+    }
+
+    protected function value(): mixed
+    {
+        return $this->value;
     }
 }
