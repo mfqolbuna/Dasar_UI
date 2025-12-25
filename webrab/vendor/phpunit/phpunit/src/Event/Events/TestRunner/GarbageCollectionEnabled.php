@@ -17,7 +17,7 @@ use PHPUnit\Event\Telemetry;
  *
  * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
  */
-final readonly class Finished implements Event
+final readonly class GarbageCollectionEnabled implements Event
 {
     private Telemetry\Info $telemetryInfo;
 
@@ -33,6 +33,6 @@ final readonly class Finished implements Event
 
     public function asString(): string
     {
-        return 'Test Runner Finished';
+        return 'Test Runner Enabled Garbage Collection';
     }
 }

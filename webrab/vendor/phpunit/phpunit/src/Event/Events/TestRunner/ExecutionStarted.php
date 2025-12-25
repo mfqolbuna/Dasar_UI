@@ -9,21 +9,25 @@
  */
 namespace PHPUnit\Event\TestRunner;
 
+use function sprintf;
 use PHPUnit\Event\Event;
 use PHPUnit\Event\Telemetry;
+use PHPUnit\Event\TestSuite\TestSuite;
 
 /**
  * @immutable
  *
  * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
  */
-final readonly class Finished implements Event
+final readonly class ExecutionStarted implements Event
 {
     private Telemetry\Info $telemetryInfo;
+    private TestSuite $testSuite;
 
-    public function __construct(Telemetry\Info $telemetryInfo)
+    public function __construct(Telemetry\Info $telemetryInfo, TestSuite $testSuite)
     {
         $this->telemetryInfo = $telemetryInfo;
+        $this->testSuite     = $testSuite;
     }
 
     public function telemetryInfo(): Telemetry\Info
@@ -31,8 +35,17 @@ final readonly class Finished implements Event
         return $this->telemetryInfo;
     }
 
+    public function testSuite(): TestSuite
+    {
+        return $this->testSuite;
+    }
+
     public function asString(): string
     {
-        return 'Test Runner Finished';
+        return sprintf(
+            'Test Runner Execution Started (%d test%s)',
+            $this->testSuite->count(),
+            $this->testSuite->count() !== 1 ? 's' : '',
+        );
     }
 }

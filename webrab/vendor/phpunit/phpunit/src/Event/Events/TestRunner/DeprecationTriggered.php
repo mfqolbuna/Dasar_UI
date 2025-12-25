@@ -9,6 +9,7 @@
  */
 namespace PHPUnit\Event\TestRunner;
 
+use function sprintf;
 use PHPUnit\Event\Event;
 use PHPUnit\Event\Telemetry;
 
@@ -17,13 +18,15 @@ use PHPUnit\Event\Telemetry;
  *
  * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
  */
-final readonly class Finished implements Event
+final readonly class DeprecationTriggered implements Event
 {
     private Telemetry\Info $telemetryInfo;
+    private string $message;
 
-    public function __construct(Telemetry\Info $telemetryInfo)
+    public function __construct(Telemetry\Info $telemetryInfo, string $message)
     {
         $this->telemetryInfo = $telemetryInfo;
+        $this->message       = $message;
     }
 
     public function telemetryInfo(): Telemetry\Info
@@ -31,8 +34,16 @@ final readonly class Finished implements Event
         return $this->telemetryInfo;
     }
 
+    public function message(): string
+    {
+        return $this->message;
+    }
+
     public function asString(): string
     {
-        return 'Test Runner Finished';
+        return sprintf(
+            'Test Runner Triggered Deprecation (%s)',
+            $this->message,
+        );
     }
 }
