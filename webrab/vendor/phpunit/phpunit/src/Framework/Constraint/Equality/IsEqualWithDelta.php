@@ -9,9 +9,7 @@
  */
 namespace PHPUnit\Framework\Constraint;
 
-use function is_string;
 use function sprintf;
-use function str_contains;
 use function trim;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Util\Exporter;
@@ -21,13 +19,15 @@ use SebastianBergmann\Comparator\Factory as ComparatorFactory;
 /**
  * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
  */
-final class IsEqual extends Constraint
+final class IsEqualWithDelta extends Constraint
 {
     private readonly mixed $value;
+    private readonly float $delta;
 
-    public function __construct(mixed $value)
+    public function __construct(mixed $value, float $delta)
     {
         $this->value = $value;
+        $this->delta = $delta;
     }
 
     /**
@@ -62,6 +62,7 @@ final class IsEqual extends Constraint
             $comparator->assertEquals(
                 $this->value,
                 $other,
+                $this->delta,
             );
         } catch (ComparisonFailure $f) {
             if ($returnResult) {
@@ -82,23 +83,10 @@ final class IsEqual extends Constraint
      */
     public function toString(): string
     {
-        $delta = '';
-
-        if (is_string($this->value)) {
-            if (str_contains($this->value, "\n")) {
-                return 'is equal to <text>';
-            }
-
-            return sprintf(
-                "is equal to '%s'",
-                $this->value,
-            );
-        }
-
         return sprintf(
-            'is equal to %s%s',
+            'is equal to %s with delta <%F>',
             Exporter::export($this->value),
-            $delta,
+            $this->delta,
         );
     }
 }

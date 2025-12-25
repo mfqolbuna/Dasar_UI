@@ -21,7 +21,7 @@ use SebastianBergmann\Comparator\Factory as ComparatorFactory;
 /**
  * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
  */
-final class IsEqual extends Constraint
+final class IsEqualCanonicalizing extends Constraint
 {
     private readonly mixed $value;
 
@@ -62,6 +62,8 @@ final class IsEqual extends Constraint
             $comparator->assertEquals(
                 $this->value,
                 $other,
+                0.0,
+                true,
             );
         } catch (ComparisonFailure $f) {
             if ($returnResult) {
@@ -82,8 +84,6 @@ final class IsEqual extends Constraint
      */
     public function toString(): string
     {
-        $delta = '';
-
         if (is_string($this->value)) {
             if (str_contains($this->value, "\n")) {
                 return 'is equal to <text>';
@@ -96,9 +96,8 @@ final class IsEqual extends Constraint
         }
 
         return sprintf(
-            'is equal to %s%s',
+            'is equal to %s',
             Exporter::export($this->value),
-            $delta,
         );
     }
 }
