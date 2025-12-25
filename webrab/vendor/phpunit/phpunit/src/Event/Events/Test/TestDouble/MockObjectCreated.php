@@ -18,7 +18,7 @@ use PHPUnit\Event\Telemetry;
  *
  * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
  */
-final readonly class TestStubCreated implements Event
+final readonly class MockObjectCreated implements Event
 {
     private Telemetry\Info $telemetryInfo;
 
@@ -52,7 +52,7 @@ final readonly class TestStubCreated implements Event
     public function asString(): string
     {
         return sprintf(
-            'Test Stub Created (%s)',
+            'Mock Object Created (%s)',
             $this->className,
         );
     }

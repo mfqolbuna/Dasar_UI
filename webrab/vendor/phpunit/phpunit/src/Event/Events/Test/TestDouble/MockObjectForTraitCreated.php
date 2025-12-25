@@ -18,22 +18,22 @@ use PHPUnit\Event\Telemetry;
  *
  * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
  */
-final readonly class TestStubCreated implements Event
+final readonly class MockObjectForTraitCreated implements Event
 {
     private Telemetry\Info $telemetryInfo;
 
     /**
-     * @var class-string
+     * @var trait-string
      */
-    private string $className;
+    private string $traitName;
 
     /**
-     * @param class-string $className
+     * @param trait-string $traitName
      */
-    public function __construct(Telemetry\Info $telemetryInfo, string $className)
+    public function __construct(Telemetry\Info $telemetryInfo, string $traitName)
     {
         $this->telemetryInfo = $telemetryInfo;
-        $this->className     = $className;
+        $this->traitName     = $traitName;
     }
 
     public function telemetryInfo(): Telemetry\Info
@@ -42,18 +42,18 @@ final readonly class TestStubCreated implements Event
     }
 
     /**
-     * @return class-string
+     * @return trait-string
      */
-    public function className(): string
+    public function traitName(): string
     {
-        return $this->className;
+        return $this->traitName;
     }
 
     public function asString(): string
     {
         return sprintf(
-            'Test Stub Created (%s)',
-            $this->className,
+            'Mock Object Created (%s)',
+            $this->traitName,
         );
     }
 }

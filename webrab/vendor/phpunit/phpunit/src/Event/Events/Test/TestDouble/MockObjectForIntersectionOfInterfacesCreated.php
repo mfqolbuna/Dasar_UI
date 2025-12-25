@@ -9,6 +9,7 @@
  */
 namespace PHPUnit\Event\Test;
 
+use function implode;
 use function sprintf;
 use PHPUnit\Event\Event;
 use PHPUnit\Event\Telemetry;
@@ -18,22 +19,22 @@ use PHPUnit\Event\Telemetry;
  *
  * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
  */
-final readonly class TestStubCreated implements Event
+final readonly class MockObjectForIntersectionOfInterfacesCreated implements Event
 {
     private Telemetry\Info $telemetryInfo;
 
     /**
-     * @var class-string
+     * @var list<class-string>
      */
-    private string $className;
+    private array $interfaces;
 
     /**
-     * @param class-string $className
+     * @param list<class-string> $interfaces
      */
-    public function __construct(Telemetry\Info $telemetryInfo, string $className)
+    public function __construct(Telemetry\Info $telemetryInfo, array $interfaces)
     {
         $this->telemetryInfo = $telemetryInfo;
-        $this->className     = $className;
+        $this->interfaces    = $interfaces;
     }
 
     public function telemetryInfo(): Telemetry\Info
@@ -42,18 +43,18 @@ final readonly class TestStubCreated implements Event
     }
 
     /**
-     * @return class-string
+     * @return list<class-string>
      */
-    public function className(): string
+    public function interfaces(): array
     {
-        return $this->className;
+        return $this->interfaces;
     }
 
     public function asString(): string
     {
         return sprintf(
-            'Test Stub Created (%s)',
-            $this->className,
+            'Mock Object Created (%s)',
+            implode('&', $this->interfaces),
         );
     }
 }

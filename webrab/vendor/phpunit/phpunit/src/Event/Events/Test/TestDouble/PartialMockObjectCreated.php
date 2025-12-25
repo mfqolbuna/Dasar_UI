@@ -18,7 +18,7 @@ use PHPUnit\Event\Telemetry;
  *
  * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
  */
-final readonly class TestStubCreated implements Event
+final readonly class PartialMockObjectCreated implements Event
 {
     private Telemetry\Info $telemetryInfo;
 
@@ -28,12 +28,18 @@ final readonly class TestStubCreated implements Event
     private string $className;
 
     /**
+     * @var list<string>
+     */
+    private array $methodNames;
+
+    /**
      * @param class-string $className
      */
-    public function __construct(Telemetry\Info $telemetryInfo, string $className)
+    public function __construct(Telemetry\Info $telemetryInfo, string $className, string ...$methodNames)
     {
         $this->telemetryInfo = $telemetryInfo;
         $this->className     = $className;
+        $this->methodNames   = $methodNames;
     }
 
     public function telemetryInfo(): Telemetry\Info
@@ -49,10 +55,18 @@ final readonly class TestStubCreated implements Event
         return $this->className;
     }
 
+    /**
+     * @return list<string>
+     */
+    public function methodNames(): array
+    {
+        return $this->methodNames;
+    }
+
     public function asString(): string
     {
         return sprintf(
-            'Test Stub Created (%s)',
+            'Partial Mock Object Created (%s)',
             $this->className,
         );
     }
