@@ -9,6 +9,7 @@
  */
 namespace PHPUnit\Event\Test;
 
+use const PHP_EOL;
 use function sprintf;
 use PHPUnit\Event\Code;
 use PHPUnit\Event\Event;
@@ -19,7 +20,7 @@ use PHPUnit\Event\Telemetry;
  *
  * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
  */
-final readonly class PreConditionCalled implements Event
+final readonly class BeforeFirstTestMethodFinished implements Event
 {
     private Telemetry\Info$telemetryInfo;
 
@@ -27,16 +28,20 @@ final readonly class PreConditionCalled implements Event
      * @var class-string
      */
     private string $testClassName;
-    private Code\ClassMethod $calledMethod;
+
+    /**
+     * @var list<Code\ClassMethod>
+     */
+    private array $calledMethods;
 
     /**
      * @param class-string $testClassName
      */
-    public function __construct(Telemetry\Info $telemetryInfo, string $testClassName, Code\ClassMethod $calledMethod)
+    public function __construct(Telemetry\Info $telemetryInfo, string $testClassName, Code\ClassMethod ...$calledMethods)
     {
         $this->telemetryInfo = $telemetryInfo;
         $this->testClassName = $testClassName;
-        $this->calledMethod  = $calledMethod;
+        $this->calledMethods = $calledMethods;
     }
 
     public function telemetryInfo(): Telemetry\Info
@@ -52,17 +57,26 @@ final readonly class PreConditionCalled implements Event
         return $this->testClassName;
     }
 
-    public function calledMethod(): Code\ClassMethod
+    /**
+     * @return list<Code\ClassMethod>
+     */
+    public function calledMethods(): array
     {
-        return $this->calledMethod;
+        return $this->calledMethods;
     }
 
     public function asString(): string
     {
-        return sprintf(
-            'Pre Condition Method Called (%s::%s)',
-            $this->calledMethod->className(),
-            $this->calledMethod->methodName(),
-        );
+        $buffer = 'Before First Test Method Finished:';
+
+        foreach ($this->calledMethods as $calledMethod) {
+            $buffer .= sprintf(
+                PHP_EOL . '- %s::%s',
+                $calledMethod->className(),
+                $calledMethod->methodName(),
+            );
+        }
+
+        return $buffer;
     }
 }

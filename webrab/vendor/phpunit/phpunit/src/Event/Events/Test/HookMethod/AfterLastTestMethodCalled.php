@@ -19,9 +19,9 @@ use PHPUnit\Event\Telemetry;
  *
  * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
  */
-final readonly class PreConditionCalled implements Event
+final readonly class AfterLastTestMethodCalled implements Event
 {
-    private Telemetry\Info$telemetryInfo;
+    private Telemetry\Info $telemetryInfo;
 
     /**
      * @var class-string
@@ -60,7 +60,7 @@ final readonly class PreConditionCalled implements Event
     public function asString(): string
     {
         return sprintf(
-            'Pre Condition Method Called (%s::%s)',
+            'After Last Test Method Called (%s::%s)',
             $this->calledMethod->className(),
             $this->calledMethod->methodName(),
         );

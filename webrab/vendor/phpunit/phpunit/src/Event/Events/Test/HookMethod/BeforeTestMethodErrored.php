@@ -9,8 +9,10 @@
  */
 namespace PHPUnit\Event\Test;
 
+use const PHP_EOL;
 use function sprintf;
 use PHPUnit\Event\Code;
+use PHPUnit\Event\Code\Throwable;
 use PHPUnit\Event\Event;
 use PHPUnit\Event\Telemetry;
 
@@ -19,24 +21,26 @@ use PHPUnit\Event\Telemetry;
  *
  * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
  */
-final readonly class PreConditionCalled implements Event
+final readonly class BeforeTestMethodErrored implements Event
 {
-    private Telemetry\Info$telemetryInfo;
+    private Telemetry\Info $telemetryInfo;
 
     /**
      * @var class-string
      */
     private string $testClassName;
     private Code\ClassMethod $calledMethod;
+    private Throwable $throwable;
 
     /**
      * @param class-string $testClassName
      */
-    public function __construct(Telemetry\Info $telemetryInfo, string $testClassName, Code\ClassMethod $calledMethod)
+    public function __construct(Telemetry\Info $telemetryInfo, string $testClassName, Code\ClassMethod $calledMethod, Throwable $throwable)
     {
         $this->telemetryInfo = $telemetryInfo;
         $this->testClassName = $testClassName;
         $this->calledMethod  = $calledMethod;
+        $this->throwable     = $throwable;
     }
 
     public function telemetryInfo(): Telemetry\Info
@@ -57,12 +61,24 @@ final readonly class PreConditionCalled implements Event
         return $this->calledMethod;
     }
 
+    public function throwable(): Throwable
+    {
+        return $this->throwable;
+    }
+
     public function asString(): string
     {
+        $message = $this->throwable->message();
+
+        if (!empty($message)) {
+            $message = PHP_EOL . $message;
+        }
+
         return sprintf(
-            'Pre Condition Method Called (%s::%s)',
+            'Before Test Method Errored (%s::%s)%s',
             $this->calledMethod->className(),
             $this->calledMethod->methodName(),
+            $message,
         );
     }
 }
