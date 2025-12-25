@@ -11,7 +11,6 @@ namespace PHPUnit\Event\Application;
 
 use function sprintf;
 use PHPUnit\Event\Event;
-use PHPUnit\Event\Runtime\Runtime;
 use PHPUnit\Event\Telemetry;
 
 /**
@@ -19,15 +18,15 @@ use PHPUnit\Event\Telemetry;
  *
  * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
  */
-final readonly class Started implements Event
+final readonly class Finished implements Event
 {
     private Telemetry\Info $telemetryInfo;
-    private Runtime $runtime;
+    private int $shellExitCode;
 
-    public function __construct(Telemetry\Info $telemetryInfo, Runtime $runtime)
+    public function __construct(Telemetry\Info $telemetryInfo, int $shellExitCode)
     {
         $this->telemetryInfo = $telemetryInfo;
-        $this->runtime       = $runtime;
+        $this->shellExitCode = $shellExitCode;
     }
 
     public function telemetryInfo(): Telemetry\Info
@@ -35,16 +34,16 @@ final readonly class Started implements Event
         return $this->telemetryInfo;
     }
 
-    public function runtime(): Runtime
+    public function shellExitCode(): int
     {
-        return $this->runtime;
+        return $this->shellExitCode;
     }
 
     public function asString(): string
     {
         return sprintf(
-            'PHPUnit Started (%s)',
-            $this->runtime->asString(),
+            'PHPUnit Finished (Shell Exit Code: %d)',
+            $this->shellExitCode,
         );
     }
 }
