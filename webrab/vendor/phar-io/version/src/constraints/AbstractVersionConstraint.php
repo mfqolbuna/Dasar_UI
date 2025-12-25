@@ -9,8 +9,15 @@
  */
 namespace PharIo\Version;
 
-interface VersionConstraint {
-    public function complies(Version $version): bool;
+abstract class AbstractVersionConstraint implements VersionConstraint {
+    /** @var string */
+    private $originalValue;
 
-    public function asString(): string;
+    public function __construct(string $originalValue) {
+        $this->originalValue = $originalValue;
+    }
+
+    public function asString(): string {
+        return $this->originalValue;
+    }
 }
