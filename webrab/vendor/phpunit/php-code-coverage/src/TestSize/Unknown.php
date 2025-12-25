@@ -12,12 +12,15 @@ namespace SebastianBergmann\CodeCoverage\Test\TestSize;
 /**
  * @immutable
  */
-abstract class Known extends TestSize
+final class Unknown extends TestSize
 {
-    public function isKnown(): true
+    public function isUnknown(): true
     {
         return true;
     }
 
-    abstract public function isGreaterThan(self $other): bool;
+    public function asString(): string
+    {
+        return 'unknown';
+    }
 }

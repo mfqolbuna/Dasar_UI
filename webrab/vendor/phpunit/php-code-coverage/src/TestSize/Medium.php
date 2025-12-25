@@ -12,12 +12,20 @@ namespace SebastianBergmann\CodeCoverage\Test\TestSize;
 /**
  * @immutable
  */
-abstract class Known extends TestSize
+final class Medium extends Known
 {
-    public function isKnown(): true
+    public function isMedium(): true
     {
         return true;
     }
 
-    abstract public function isGreaterThan(self $other): bool;
+    public function isGreaterThan(TestSize $other): bool
+    {
+        return $other->isSmall();
+    }
+
+    public function asString(): string
+    {
+        return 'medium';
+    }
 }
