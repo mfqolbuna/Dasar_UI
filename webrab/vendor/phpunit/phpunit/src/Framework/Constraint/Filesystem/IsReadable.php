@@ -9,20 +9,20 @@
  */
 namespace PHPUnit\Framework\Constraint;
 
-use function file_exists;
+use function is_readable;
 use function sprintf;
 
 /**
  * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
  */
-final class FileExists extends Constraint
+final class IsReadable extends Constraint
 {
     /**
      * Returns a string representation of the constraint.
      */
     public function toString(): string
     {
-        return 'file exists';
+        return 'is readable';
     }
 
     /**
@@ -31,7 +31,7 @@ final class FileExists extends Constraint
      */
     protected function matches(mixed $other): bool
     {
-        return file_exists($other);
+        return is_readable($other);
     }
 
     /**
@@ -43,7 +43,7 @@ final class FileExists extends Constraint
     protected function failureDescription(mixed $other): string
     {
         return sprintf(
-            'file "%s" exists',
+            '"%s" is readable',
             $other,
         );
     }
