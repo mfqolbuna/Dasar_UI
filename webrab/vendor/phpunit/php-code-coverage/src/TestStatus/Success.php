@@ -12,15 +12,15 @@ namespace SebastianBergmann\CodeCoverage\Test\TestStatus;
 /**
  * @immutable
  */
-final class Failure extends Known
+final class Success extends Known
 {
-    public function isFailure(): true
+    public function isSuccess(): true
     {
         return true;
     }
 
     public function asString(): string
     {
-        return 'failure';
+        return 'success';
     }
 }
