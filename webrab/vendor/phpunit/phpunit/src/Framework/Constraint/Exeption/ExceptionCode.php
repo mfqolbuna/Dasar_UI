@@ -10,32 +10,25 @@
 namespace PHPUnit\Framework\Constraint;
 
 use function sprintf;
-use PHPUnit\Util\Filter;
-use Throwable;
+use PHPUnit\Util\Exporter;
 
 /**
  * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
  *
  * @internal This class is not covered by the backward compatibility promise for PHPUnit
  */
-final class Exception extends Constraint
+final class ExceptionCode extends Constraint
 {
-    private readonly string $className;
+    private readonly int|string $expectedCode;
 
-    public function __construct(string $className)
+    public function __construct(int|string $expected)
     {
-        $this->className = $className;
+        $this->expectedCode = $expected;
     }
 
-    /**
-     * Returns a string representation of the constraint.
-     */
     public function toString(): string
     {
-        return sprintf(
-            'exception of type "%s"',
-            $this->className,
-        );
+        return 'exception code is ' . $this->expectedCode;
     }
 
     /**
@@ -44,7 +37,7 @@ final class Exception extends Constraint
      */
     protected function matches(mixed $other): bool
     {
-        return $other instanceof $this->className;
+        return (string) $other === (string) $this->expectedCode;
     }
 
     /**
@@ -52,30 +45,13 @@ final class Exception extends Constraint
      *
      * The beginning of failure messages is "Failed asserting that" in most
      * cases. This method should return the second part of that sentence.
-     *
-     * @throws \PHPUnit\Framework\Exception
      */
     protected function failureDescription(mixed $other): string
     {
-        if ($other === null) {
-            return sprintf(
-                'exception of type "%s" is thrown',
-                $this->className,
-            );
-        }
-
-        $message = '';
-
-        if ($other instanceof Throwable) {
-            $message = '. Message was: "' . $other->getMessage() . '" at'
-                . "\n" . Filter::stackTraceFromThrowableAsString($other);
-        }
-
         return sprintf(
-            'exception of type "%s" matches expected exception "%s"%s',
-            $other::class,
-            $this->className,
-            $message,
+            '%s is equal to expected exception code %s',
+            Exporter::export($other),
+            Exporter::export($this->expectedCode),
         );
     }
 }

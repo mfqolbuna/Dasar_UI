@@ -9,42 +9,51 @@
  */
 namespace PHPUnit\Framework\Constraint;
 
+use function preg_match;
 use function sprintf;
-use PHPUnit\Util\Filter;
-use Throwable;
+use Exception;
+use PHPUnit\Util\Exporter;
 
 /**
  * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
  *
  * @internal This class is not covered by the backward compatibility promise for PHPUnit
  */
-final class Exception extends Constraint
+final class ExceptionMessageMatchesRegularExpression extends Constraint
 {
-    private readonly string $className;
+    private readonly string $regularExpression;
 
-    public function __construct(string $className)
+    public function __construct(string $regularExpression)
     {
-        $this->className = $className;
+        $this->regularExpression = $regularExpression;
     }
 
-    /**
-     * Returns a string representation of the constraint.
-     */
     public function toString(): string
     {
-        return sprintf(
-            'exception of type "%s"',
-            $this->className,
-        );
+        return 'exception message matches ' . Exporter::export($this->regularExpression);
     }
 
     /**
      * Evaluates the constraint for parameter $other. Returns true if the
      * constraint is met, false otherwise.
+     *
+     * @throws \PHPUnit\Framework\Exception
+     * @throws Exception
      */
     protected function matches(mixed $other): bool
     {
-        return $other instanceof $this->className;
+        $match = @preg_match($this->regularExpression, (string) $other);
+
+        if ($match === false) {
+            throw new \PHPUnit\Framework\Exception(
+                sprintf(
+                    'Invalid expected exception message regular expression given: %s',
+                    $this->regularExpression,
+                ),
+            );
+        }
+
+        return $match === 1;
     }
 
     /**
@@ -52,30 +61,13 @@ final class Exception extends Constraint
      *
      * The beginning of failure messages is "Failed asserting that" in most
      * cases. This method should return the second part of that sentence.
-     *
-     * @throws \PHPUnit\Framework\Exception
      */
     protected function failureDescription(mixed $other): string
     {
-        if ($other === null) {
-            return sprintf(
-                'exception of type "%s" is thrown',
-                $this->className,
-            );
-        }
-
-        $message = '';
-
-        if ($other instanceof Throwable) {
-            $message = '. Message was: "' . $other->getMessage() . '" at'
-                . "\n" . Filter::stackTraceFromThrowableAsString($other);
-        }
-
         return sprintf(
-            'exception of type "%s" matches expected exception "%s"%s',
-            $other::class,
-            $this->className,
-            $message,
+            "exception message '%s' matches '%s'",
+            $other,
+            $this->regularExpression,
         );
     }
 }
