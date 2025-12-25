@@ -14,18 +14,18 @@ namespace PHPUnit\Event\Code\IssueTrigger;
  *
  * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
  */
-final class TestTrigger extends IssueTrigger
+final class IndirectTrigger extends IssueTrigger
 {
     /**
-     * Your test code triggers an issue.
+     * Third-party code triggers an issue either in your own code or in third-party code.
      */
-    public function isTest(): true
+    public function isIndirect(): true
     {
         return true;
     }
 
     public function asString(): string
     {
-        return 'issue triggered by test code';
+        return 'issue triggered by third-party code';
     }
 }
