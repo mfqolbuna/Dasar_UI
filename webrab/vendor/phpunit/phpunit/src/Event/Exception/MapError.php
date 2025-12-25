@@ -9,6 +9,11 @@
  */
 namespace PHPUnit\Event;
 
-interface Exception extends \PHPUnit\Exception
+use RuntimeException;
+
+/**
+ * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
+ */
+final class MapError extends RuntimeException implements Exception
 {
 }

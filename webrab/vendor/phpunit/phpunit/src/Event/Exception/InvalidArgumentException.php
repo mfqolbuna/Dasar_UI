@@ -9,6 +9,9 @@
  */
 namespace PHPUnit\Event;
 
-interface Exception extends \PHPUnit\Exception
+/**
+ * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
+ */
+final class InvalidArgumentException extends \InvalidArgumentException implements Exception
 {
 }
