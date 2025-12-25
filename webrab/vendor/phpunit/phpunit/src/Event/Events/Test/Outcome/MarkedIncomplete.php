@@ -13,7 +13,6 @@ use const PHP_EOL;
 use function sprintf;
 use function trim;
 use PHPUnit\Event\Code;
-use PHPUnit\Event\Code\ComparisonFailure;
 use PHPUnit\Event\Code\Throwable;
 use PHPUnit\Event\Event;
 use PHPUnit\Event\Telemetry;
@@ -23,19 +22,17 @@ use PHPUnit\Event\Telemetry;
  *
  * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
  */
-final readonly class Failed implements Event
+final readonly class MarkedIncomplete implements Event
 {
     private Telemetry\Info $telemetryInfo;
     private Code\Test $test;
     private Throwable $throwable;
-    private ?ComparisonFailure $comparisonFailure;
 
-    public function __construct(Telemetry\Info $telemetryInfo, Code\Test $test, Throwable $throwable, ?ComparisonFailure $comparisonFailure)
+    public function __construct(Telemetry\Info $telemetryInfo, Code\Test $test, Throwable $throwable)
     {
-        $this->telemetryInfo     = $telemetryInfo;
-        $this->test              = $test;
-        $this->throwable         = $throwable;
-        $this->comparisonFailure = $comparisonFailure;
+        $this->telemetryInfo = $telemetryInfo;
+        $this->test          = $test;
+        $this->throwable     = $throwable;
     }
 
     public function telemetryInfo(): Telemetry\Info
@@ -53,26 +50,6 @@ final readonly class Failed implements Event
         return $this->throwable;
     }
 
-    /**
-     * @phpstan-assert-if-true !null $this->comparisonFailure
-     */
-    public function hasComparisonFailure(): bool
-    {
-        return $this->comparisonFailure !== null;
-    }
-
-    /**
-     * @throws NoComparisonFailureException
-     */
-    public function comparisonFailure(): ComparisonFailure
-    {
-        if ($this->comparisonFailure === null) {
-            throw new NoComparisonFailureException;
-        }
-
-        return $this->comparisonFailure;
-    }
-
     public function asString(): string
     {
         $message = trim($this->throwable->message());
@@ -82,7 +59,7 @@ final readonly class Failed implements Event
         }
 
         return sprintf(
-            'Test Failed (%s)%s',
+            'Test Marked Incomplete (%s)%s',
             $this->test->id(),
             $message,
         );
