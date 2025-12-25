@@ -18,17 +18,15 @@ use PHPUnit\Event\Telemetry;
  *
  * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
  */
-final readonly class Skipped implements Event
+final readonly class Started implements Event
 {
     private Telemetry\Info $telemetryInfo;
     private TestSuite $testSuite;
-    private string $message;
 
-    public function __construct(Telemetry\Info $telemetryInfo, TestSuite $testSuite, string $message)
+    public function __construct(Telemetry\Info $telemetryInfo, TestSuite $testSuite)
     {
         $this->telemetryInfo = $telemetryInfo;
         $this->testSuite     = $testSuite;
-        $this->message       = $message;
     }
 
     public function telemetryInfo(): Telemetry\Info
@@ -41,17 +39,13 @@ final readonly class Skipped implements Event
         return $this->testSuite;
     }
 
-    public function message(): string
-    {
-        return $this->message;
-    }
-
     public function asString(): string
     {
         return sprintf(
-            'Test Suite Skipped (%s, %s)',
+            'Test Suite Started (%s, %d test%s)',
             $this->testSuite->name(),
-            $this->message,
+            $this->testSuite->count(),
+            $this->testSuite->count() !== 1 ? 's' : '',
         );
     }
 }
