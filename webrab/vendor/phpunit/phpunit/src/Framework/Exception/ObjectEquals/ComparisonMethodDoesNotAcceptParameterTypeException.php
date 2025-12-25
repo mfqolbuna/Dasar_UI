@@ -9,17 +9,24 @@
  */
 namespace PHPUnit\Framework;
 
+use function sprintf;
+
 /**
  * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
  *
  * @internal This class is not covered by the backward compatibility promise for PHPUnit
  */
-final class ActualValueIsNotAnObjectException extends Exception
+final class ComparisonMethodDoesNotAcceptParameterTypeException extends Exception
 {
-    public function __construct()
+    public function __construct(string $className, string $methodName, string $type)
     {
         parent::__construct(
-            'Actual value is not an object',
+            sprintf(
+                '%s is not an accepted argument type for comparison method %s::%s().',
+                $type,
+                $className,
+                $methodName,
+            ),
         );
     }
 }
