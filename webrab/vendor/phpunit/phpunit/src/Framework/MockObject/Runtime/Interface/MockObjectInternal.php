@@ -9,13 +9,14 @@
  */
 namespace PHPUnit\Framework\MockObject;
 
-use PHPUnit\Framework\MockObject\Builder\InvocationStubber;
-
 /**
- * @method InvocationStubber method($constraint)
- *
  * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
+ *
+ * @internal This interface is not covered by the backward compatibility promise for PHPUnit
  */
-interface Stub
+interface MockObjectInternal extends MockObject, StubInternal
 {
+    public function __phpunit_hasMatchers(): bool;
+
+    public function __phpunit_verify(bool $unsetInvocationMocker = true): void;
 }
