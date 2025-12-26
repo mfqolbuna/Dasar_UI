@@ -9,11 +9,13 @@
  */
 namespace PHPUnit\Runner;
 
+use RuntimeException;
+
 /**
  * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
  *
  * @internal This class is not covered by the backward compatibility promise for PHPUnit
  */
-interface Exception extends \PHPUnit\Exception
+final class InvalidOrderException extends RuntimeException implements Exception
 {
 }

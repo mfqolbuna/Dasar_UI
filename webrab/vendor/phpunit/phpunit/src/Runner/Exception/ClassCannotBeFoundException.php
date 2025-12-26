@@ -9,11 +9,24 @@
  */
 namespace PHPUnit\Runner;
 
+use function sprintf;
+use RuntimeException;
+
 /**
  * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
  *
  * @internal This class is not covered by the backward compatibility promise for PHPUnit
  */
-interface Exception extends \PHPUnit\Exception
+final class ClassCannotBeFoundException extends RuntimeException implements Exception
 {
+    public function __construct(string $className, string $file)
+    {
+        parent::__construct(
+            sprintf(
+                'Class %s cannot be found in %s',
+                $className,
+                $file,
+            ),
+        );
+    }
 }

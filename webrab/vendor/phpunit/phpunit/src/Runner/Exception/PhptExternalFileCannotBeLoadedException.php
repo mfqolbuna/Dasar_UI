@@ -9,11 +9,24 @@
  */
 namespace PHPUnit\Runner;
 
+use function sprintf;
+use RuntimeException;
+
 /**
  * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
  *
  * @internal This class is not covered by the backward compatibility promise for PHPUnit
  */
-interface Exception extends \PHPUnit\Exception
+final class PhptExternalFileCannotBeLoadedException extends RuntimeException implements Exception
 {
+    public function __construct(string $section, string $file)
+    {
+        parent::__construct(
+            sprintf(
+                'Could not load --%s-- %s for PHPT file',
+                $section . '_EXTERNAL',
+                $file,
+            ),
+        );
+    }
 }

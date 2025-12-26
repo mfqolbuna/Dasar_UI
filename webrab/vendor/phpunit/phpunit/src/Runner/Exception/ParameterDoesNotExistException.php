@@ -9,11 +9,23 @@
  */
 namespace PHPUnit\Runner;
 
+use function sprintf;
+use RuntimeException;
+
 /**
  * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
  *
  * @internal This class is not covered by the backward compatibility promise for PHPUnit
  */
-interface Exception extends \PHPUnit\Exception
+final class ParameterDoesNotExistException extends RuntimeException implements Exception
 {
+    public function __construct(string $name)
+    {
+        parent::__construct(
+            sprintf(
+                'Parameter "%s" does not exist',
+                $name,
+            ),
+        );
+    }
 }
