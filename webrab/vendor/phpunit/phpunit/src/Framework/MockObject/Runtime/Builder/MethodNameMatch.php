@@ -9,18 +9,18 @@
  */
 namespace PHPUnit\Framework\MockObject\Builder;
 
-use PHPUnit\Framework\MockObject\Stub\Stub as BaseStub;
+use PHPUnit\Framework\Constraint\Constraint;
 
 /**
  * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
  *
  * @internal This class is not covered by the backward compatibility promise for PHPUnit
  */
-interface Stub extends Identity
+interface MethodNameMatch extends ParametersMatch
 {
     /**
-     * Stubs the matching method with the stub object $stub. Any invocations of
-     * the matched method will now be handled by the stub instead.
+     * Adds a new method name match and returns the parameter match object for
+     * further matching possibilities.
      */
-    public function will(BaseStub $stub): Identity;
+    public function method(Constraint|string $constraint): self;
 }
