@@ -9,22 +9,22 @@
  */
 namespace PHPUnit\Logging\TeamCity;
 
+use PHPUnit\Event\InvalidArgumentException;
+use PHPUnit\Event\Test\ConsideredRisky;
+use PHPUnit\Event\Test\ConsideredRiskySubscriber;
+
 /**
  * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
  *
  * @internal This class is not covered by the backward compatibility promise for PHPUnit
  */
-abstract readonly class Subscriber
+final readonly class TestConsideredRiskySubscriber extends Subscriber implements ConsideredRiskySubscriber
 {
-    private TeamCityLogger $logger;
-
-    public function __construct(TeamCityLogger $logger)
+    /**
+     * @throws InvalidArgumentException
+     */
+    public function notify(ConsideredRisky $event): void
     {
-        $this->logger = $logger;
-    }
-
-    protected function logger(): TeamCityLogger
-    {
-        return $this->logger;
+        $this->logger()->testConsideredRisky($event);
     }
 }
