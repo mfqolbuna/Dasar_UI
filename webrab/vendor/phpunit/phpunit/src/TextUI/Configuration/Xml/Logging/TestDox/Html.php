@@ -18,7 +18,7 @@ use PHPUnit\TextUI\Configuration\File;
  *
  * @immutable
  */
-final readonly class Text
+final readonly class Html
 {
     private File $target;
 
