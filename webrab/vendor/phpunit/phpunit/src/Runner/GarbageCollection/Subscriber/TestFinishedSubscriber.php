@@ -9,22 +9,23 @@
  */
 namespace PHPUnit\Runner\GarbageCollection;
 
+use PHPUnit\Event\InvalidArgumentException;
+use PHPUnit\Event\Test\Finished;
+use PHPUnit\Event\Test\FinishedSubscriber;
+
 /**
  * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
  *
  * @internal This class is not covered by the backward compatibility promise for PHPUnit
  */
-abstract readonly class Subscriber
+final readonly class TestFinishedSubscriber extends Subscriber implements FinishedSubscriber
 {
-    private GarbageCollectionHandler $handler;
-
-    public function __construct(GarbageCollectionHandler $handler)
+    /**
+     * @throws \PHPUnit\Framework\InvalidArgumentException
+     * @throws InvalidArgumentException
+     */
+    public function notify(Finished $event): void
     {
-        $this->handler = $handler;
-    }
-
-    protected function handler(): GarbageCollectionHandler
-    {
-        return $this->handler;
+        $this->handler()->testFinished();
     }
 }
