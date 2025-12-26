@@ -9,22 +9,18 @@
  */
 namespace PHPUnit\TestRunner\TestResult;
 
+use PHPUnit\Event\Test\AfterLastTestMethodErrored;
+use PHPUnit\Event\Test\AfterLastTestMethodErroredSubscriber;
+
 /**
  * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
  *
  * @internal This class is not covered by the backward compatibility promise for PHPUnit
  */
-abstract readonly class Subscriber
+final readonly class AfterTestClassMethodErroredSubscriber extends Subscriber implements AfterLastTestMethodErroredSubscriber
 {
-    private Collector $collector;
-
-    public function __construct(Collector $collector)
+    public function notify(AfterLastTestMethodErrored $event): void
     {
-        $this->collector = $collector;
-    }
-
-    protected function collector(): Collector
-    {
-        return $this->collector;
+        $this->collector()->afterTestClassMethodErrored($event);
     }
 }

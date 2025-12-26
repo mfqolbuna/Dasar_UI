@@ -9,22 +9,18 @@
  */
 namespace PHPUnit\TestRunner\TestResult;
 
+use PHPUnit\Event\Test\PhpunitErrorTriggered;
+use PHPUnit\Event\Test\PhpunitErrorTriggeredSubscriber;
+
 /**
  * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
  *
  * @internal This class is not covered by the backward compatibility promise for PHPUnit
  */
-abstract readonly class Subscriber
+final readonly class TestTriggeredPhpunitErrorSubscriber extends Subscriber implements PhpunitErrorTriggeredSubscriber
 {
-    private Collector $collector;
-
-    public function __construct(Collector $collector)
+    public function notify(PhpunitErrorTriggered $event): void
     {
-        $this->collector = $collector;
-    }
-
-    protected function collector(): Collector
-    {
-        return $this->collector;
+        $this->collector()->testTriggeredPhpunitError($event);
     }
 }

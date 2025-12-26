@@ -9,22 +9,18 @@
  */
 namespace PHPUnit\TestRunner\TestResult;
 
+use PHPUnit\Event\Test\Skipped;
+use PHPUnit\Event\Test\SkippedSubscriber;
+
 /**
  * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
  *
  * @internal This class is not covered by the backward compatibility promise for PHPUnit
  */
-abstract readonly class Subscriber
+final readonly class TestSkippedSubscriber extends Subscriber implements SkippedSubscriber
 {
-    private Collector $collector;
-
-    public function __construct(Collector $collector)
+    public function notify(Skipped $event): void
     {
-        $this->collector = $collector;
-    }
-
-    protected function collector(): Collector
-    {
-        return $this->collector;
+        $this->collector()->testSkipped($event);
     }
 }
