@@ -10,17 +10,27 @@
 namespace PHPUnit\Framework\MockObject\Stub;
 
 use PHPUnit\Framework\MockObject\Invocation;
+use Throwable;
 
 /**
  * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
  *
  * @internal This class is not covered by the backward compatibility promise for PHPUnit
  */
-interface Stub
+final readonly class Exception implements Stub
 {
+    private Throwable $exception;
+
+    public function __construct(Throwable $exception)
+    {
+        $this->exception = $exception;
+    }
+
     /**
-     * Fakes the processing of the invocation $invocation by returning a
-     * specific value.
+     * @throws Throwable
      */
-    public function invoke(Invocation $invocation): mixed;
+    public function invoke(Invocation $invocation): never
+    {
+        throw $this->exception;
+    }
 }

@@ -9,6 +9,7 @@
  */
 namespace PHPUnit\Framework\MockObject\Stub;
 
+use function call_user_func_array;
 use PHPUnit\Framework\MockObject\Invocation;
 
 /**
@@ -16,11 +17,20 @@ use PHPUnit\Framework\MockObject\Invocation;
  *
  * @internal This class is not covered by the backward compatibility promise for PHPUnit
  */
-interface Stub
+final class ReturnCallback implements Stub
 {
     /**
-     * Fakes the processing of the invocation $invocation by returning a
-     * specific value.
+     * @var callable
      */
-    public function invoke(Invocation $invocation): mixed;
+    private $callback;
+
+    public function __construct(callable $callback)
+    {
+        $this->callback = $callback;
+    }
+
+    public function invoke(Invocation $invocation): mixed
+    {
+        return call_user_func_array($this->callback, $invocation->parameters());
+    }
 }

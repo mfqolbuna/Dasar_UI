@@ -10,17 +10,20 @@
 namespace PHPUnit\Framework\MockObject\Stub;
 
 use PHPUnit\Framework\MockObject\Invocation;
+use PHPUnit\Framework\MockObject\RuntimeException;
 
 /**
  * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
  *
  * @internal This class is not covered by the backward compatibility promise for PHPUnit
  */
-interface Stub
+final class ReturnSelf implements Stub
 {
     /**
-     * Fakes the processing of the invocation $invocation by returning a
-     * specific value.
+     * @throws RuntimeException
      */
-    public function invoke(Invocation $invocation): mixed;
+    public function invoke(Invocation $invocation): object
+    {
+        return $invocation->object();
+    }
 }
