@@ -68,7 +68,7 @@ function __phpunit_run_isolated_test()
 
     ErrorHandler::instance()->useDeprecationTriggers($deprecationTriggers);
 
-    $test = new {className}('{name}');
+    $test = new {className}('{methodName}');
 
     $test->setData('{dataName}', unserialize('{data}'));
     $test->setDependencyInput(unserialize('{dependencyInput}'));
