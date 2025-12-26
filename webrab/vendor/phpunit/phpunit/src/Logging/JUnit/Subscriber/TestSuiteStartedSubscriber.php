@@ -9,22 +9,18 @@
  */
 namespace PHPUnit\Logging\JUnit;
 
+use PHPUnit\Event\TestSuite\Started;
+use PHPUnit\Event\TestSuite\StartedSubscriber;
+
 /**
  * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
  *
  * @internal This class is not covered by the backward compatibility promise for PHPUnit
  */
-abstract readonly class Subscriber
+final readonly class TestSuiteStartedSubscriber extends Subscriber implements StartedSubscriber
 {
-    private JunitXmlLogger $logger;
-
-    public function __construct(JunitXmlLogger $logger)
+    public function notify(Started $event): void
     {
-        $this->logger = $logger;
-    }
-
-    protected function logger(): JunitXmlLogger
-    {
-        return $this->logger;
+        $this->logger()->testSuiteStarted($event);
     }
 }

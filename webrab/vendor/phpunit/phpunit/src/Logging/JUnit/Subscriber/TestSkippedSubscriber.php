@@ -9,22 +9,22 @@
  */
 namespace PHPUnit\Logging\JUnit;
 
+use PHPUnit\Event\InvalidArgumentException;
+use PHPUnit\Event\Test\Skipped;
+use PHPUnit\Event\Test\SkippedSubscriber;
+
 /**
  * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
  *
  * @internal This class is not covered by the backward compatibility promise for PHPUnit
  */
-abstract readonly class Subscriber
+final readonly class TestSkippedSubscriber extends Subscriber implements SkippedSubscriber
 {
-    private JunitXmlLogger $logger;
-
-    public function __construct(JunitXmlLogger $logger)
+    /**
+     * @throws InvalidArgumentException
+     */
+    public function notify(Skipped $event): void
     {
-        $this->logger = $logger;
-    }
-
-    protected function logger(): JunitXmlLogger
-    {
-        return $this->logger;
+        $this->logger()->testSkipped($event);
     }
 }

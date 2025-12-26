@@ -9,22 +9,22 @@
  */
 namespace PHPUnit\Logging\JUnit;
 
+use PHPUnit\Event\InvalidArgumentException;
+use PHPUnit\Event\Test\Finished;
+use PHPUnit\Event\Test\FinishedSubscriber;
+
 /**
  * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
  *
  * @internal This class is not covered by the backward compatibility promise for PHPUnit
  */
-abstract readonly class Subscriber
+final readonly class TestFinishedSubscriber extends Subscriber implements FinishedSubscriber
 {
-    private JunitXmlLogger $logger;
-
-    public function __construct(JunitXmlLogger $logger)
+    /**
+     * @throws InvalidArgumentException
+     */
+    public function notify(Finished $event): void
     {
-        $this->logger = $logger;
-    }
-
-    protected function logger(): JunitXmlLogger
-    {
-        return $this->logger;
+        $this->logger()->testFinished($event);
     }
 }
