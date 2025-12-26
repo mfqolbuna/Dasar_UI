@@ -16,20 +16,15 @@ namespace PHPUnit\Framework\TestSize;
  *
  * @immutable
  */
-final readonly class Large extends Known
+final readonly class Unknown extends TestSize
 {
-    public function isLarge(): true
+    public function isUnknown(): true
     {
         return true;
     }
 
-    public function isGreaterThan(TestSize $other): bool
-    {
-        return !$other->isLarge();
-    }
-
     public function asString(): string
     {
-        return 'large';
+        return 'unknown';
     }
 }
