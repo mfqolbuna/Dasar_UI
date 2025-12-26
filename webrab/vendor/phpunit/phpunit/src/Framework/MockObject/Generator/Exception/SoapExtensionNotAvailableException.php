@@ -9,13 +9,17 @@
  */
 namespace PHPUnit\Framework\MockObject\Generator;
 
-use PHPUnit\Framework\MockObject\Exception as BaseException;
-
 /**
  * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
  *
- * @internal This interface is not covered by the backward compatibility promise for PHPUnit
+ * @internal This class is not covered by the backward compatibility promise for PHPUnit
  */
-interface Exception extends BaseException
+final class SoapExtensionNotAvailableException extends \PHPUnit\Framework\Exception implements Exception
 {
+    public function __construct()
+    {
+        parent::__construct(
+            'The SOAP extension is required to generate a test double from WSDL',
+        );
+    }
 }

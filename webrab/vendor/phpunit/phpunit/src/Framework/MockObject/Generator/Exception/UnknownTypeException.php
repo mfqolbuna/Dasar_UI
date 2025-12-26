@@ -9,13 +9,22 @@
  */
 namespace PHPUnit\Framework\MockObject\Generator;
 
-use PHPUnit\Framework\MockObject\Exception as BaseException;
+use function sprintf;
 
 /**
  * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
  *
- * @internal This interface is not covered by the backward compatibility promise for PHPUnit
+ * @internal This class is not covered by the backward compatibility promise for PHPUnit
  */
-interface Exception extends BaseException
+final class UnknownTypeException extends \PHPUnit\Framework\Exception implements Exception
 {
+    public function __construct(string $type)
+    {
+        parent::__construct(
+            sprintf(
+                'Class or interface "%s" does not exist',
+                $type,
+            ),
+        );
+    }
 }
