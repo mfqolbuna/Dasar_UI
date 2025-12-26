@@ -9,6 +9,8 @@
  */
 namespace PHPUnit\Metadata;
 
-interface Exception extends \PHPUnit\Exception
+use RuntimeException;
+
+final class InvalidVersionRequirementException extends RuntimeException implements Exception
 {
 }
