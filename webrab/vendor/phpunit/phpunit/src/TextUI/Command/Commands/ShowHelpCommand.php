@@ -9,29 +9,27 @@
  */
 namespace PHPUnit\TextUI\Command;
 
-use function version_compare;
-use PHPUnit\Runner\Version;
+use PHPUnit\TextUI\Help;
 
 /**
  * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
  *
  * @internal This class is not covered by the backward compatibility promise for PHPUnit
  */
-final readonly class AtLeastVersionCommand implements Command
+final readonly class ShowHelpCommand implements Command
 {
-    private string $version;
+    private int $shellExitCode;
 
-    public function __construct(string $version)
+    public function __construct(int $shellExitCode)
     {
-        $this->version = $version;
+        $this->shellExitCode = $shellExitCode;
     }
 
     public function execute(): Result
     {
-        if (version_compare(Version::id(), $this->version, '>=')) {
-            return Result::from();
-        }
-
-        return Result::from('', Result::FAILURE);
+        return Result::from(
+            (new Help)->generate(),
+            $this->shellExitCode,
+        );
     }
 }
