@@ -9,7 +9,7 @@
  */
 namespace PHPUnit\TextUI\XmlConfiguration\CodeCoverage\Report;
 
-use PHPUnit\TextUI\Configuration\Directory;
+use PHPUnit\TextUI\Configuration\File;
 
 /**
  * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
@@ -18,17 +18,24 @@ use PHPUnit\TextUI\Configuration\Directory;
  *
  * @immutable
  */
-final readonly class Xml
+final readonly class Crap4j
 {
-    private Directory $target;
+    private File $target;
+    private int $threshold;
 
-    public function __construct(Directory $target)
+    public function __construct(File $target, int $threshold)
     {
-        $this->target = $target;
+        $this->target    = $target;
+        $this->threshold = $threshold;
     }
 
-    public function target(): Directory
+    public function target(): File
     {
         return $this->target;
+    }
+
+    public function threshold(): int
+    {
+        return $this->threshold;
     }
 }
