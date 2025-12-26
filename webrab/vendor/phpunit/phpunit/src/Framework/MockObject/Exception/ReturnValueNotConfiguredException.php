@@ -9,13 +9,23 @@
  */
 namespace PHPUnit\Framework\MockObject;
 
-use Throwable;
+use function sprintf;
 
 /**
  * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
  *
  * @internal This class is not covered by the backward compatibility promise for PHPUnit
  */
-interface Exception extends Throwable
+final class ReturnValueNotConfiguredException extends \PHPUnit\Framework\Exception implements Exception
 {
+    public function __construct(Invocation $invocation)
+    {
+        parent::__construct(
+            sprintf(
+                'No return value is configured for %s::%s() and return value generation is disabled',
+                $invocation->className(),
+                $invocation->methodName(),
+            ),
+        );
+    }
 }

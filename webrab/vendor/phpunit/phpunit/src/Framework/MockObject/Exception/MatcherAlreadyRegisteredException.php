@@ -9,13 +9,22 @@
  */
 namespace PHPUnit\Framework\MockObject;
 
-use Throwable;
+use function sprintf;
 
 /**
  * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
  *
  * @internal This class is not covered by the backward compatibility promise for PHPUnit
  */
-interface Exception extends Throwable
+final class MatcherAlreadyRegisteredException extends \PHPUnit\Framework\Exception implements Exception
 {
+    public function __construct(string $id)
+    {
+        parent::__construct(
+            sprintf(
+                'Matcher with id <%s> is already registered',
+                $id,
+            ),
+        );
+    }
 }

@@ -9,13 +9,19 @@
  */
 namespace PHPUnit\Framework\MockObject;
 
-use Throwable;
-
 /**
  * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
  *
  * @internal This class is not covered by the backward compatibility promise for PHPUnit
+ *
+ * @codeCoverageIgnore
  */
-interface Exception extends Throwable
+final class CannotCloneTestDoubleForReadonlyClassException extends \PHPUnit\Framework\Exception implements Exception
 {
+    public function __construct()
+    {
+        parent::__construct(
+            'Cloning test doubles for readonly classes is not supported on PHP 8.2',
+        );
+    }
 }
