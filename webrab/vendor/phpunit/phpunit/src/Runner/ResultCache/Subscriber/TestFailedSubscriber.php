@@ -9,22 +9,18 @@
  */
 namespace PHPUnit\Runner\ResultCache;
 
+use PHPUnit\Event\Test\Failed;
+use PHPUnit\Event\Test\FailedSubscriber;
+
 /**
  * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
  *
  * @internal This class is not covered by the backward compatibility promise for PHPUnit
  */
-abstract readonly class Subscriber
+final readonly class TestFailedSubscriber extends Subscriber implements FailedSubscriber
 {
-    private ResultCacheHandler $handler;
-
-    public function __construct(ResultCacheHandler $handler)
+    public function notify(Failed $event): void
     {
-        $this->handler = $handler;
-    }
-
-    protected function handler(): ResultCacheHandler
-    {
-        return $this->handler;
+        $this->handler()->testFailed($event);
     }
 }

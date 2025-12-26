@@ -9,22 +9,18 @@
  */
 namespace PHPUnit\Runner\ResultCache;
 
+use PHPUnit\Event\Test\ConsideredRisky;
+use PHPUnit\Event\Test\ConsideredRiskySubscriber;
+
 /**
  * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
  *
  * @internal This class is not covered by the backward compatibility promise for PHPUnit
  */
-abstract readonly class Subscriber
+final readonly class TestConsideredRiskySubscriber extends Subscriber implements ConsideredRiskySubscriber
 {
-    private ResultCacheHandler $handler;
-
-    public function __construct(ResultCacheHandler $handler)
+    public function notify(ConsideredRisky $event): void
     {
-        $this->handler = $handler;
-    }
-
-    protected function handler(): ResultCacheHandler
-    {
-        return $this->handler;
+        $this->handler()->testConsideredRisky($event);
     }
 }

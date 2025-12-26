@@ -9,22 +9,18 @@
  */
 namespace PHPUnit\Runner\ResultCache;
 
+use PHPUnit\Event\TestSuite\Started;
+use PHPUnit\Event\TestSuite\StartedSubscriber;
+
 /**
  * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
  *
  * @internal This class is not covered by the backward compatibility promise for PHPUnit
  */
-abstract readonly class Subscriber
+final readonly class TestSuiteStartedSubscriber extends Subscriber implements StartedSubscriber
 {
-    private ResultCacheHandler $handler;
-
-    public function __construct(ResultCacheHandler $handler)
+    public function notify(Started $event): void
     {
-        $this->handler = $handler;
-    }
-
-    protected function handler(): ResultCacheHandler
-    {
-        return $this->handler;
+        $this->handler()->testSuiteStarted();
     }
 }
