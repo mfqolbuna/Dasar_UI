@@ -9,22 +9,18 @@
  */
 namespace PHPUnit\Logging\TestDox;
 
+use PHPUnit\Event\Test\ConsideredRisky;
+use PHPUnit\Event\Test\ConsideredRiskySubscriber;
+
 /**
  * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
  *
  * @internal This class is not covered by the backward compatibility promise for PHPUnit
  */
-abstract readonly class Subscriber
+final readonly class TestConsideredRiskySubscriber extends Subscriber implements ConsideredRiskySubscriber
 {
-    private TestResultCollector $collector;
-
-    public function __construct(TestResultCollector $collector)
+    public function notify(ConsideredRisky $event): void
     {
-        $this->collector = $collector;
-    }
-
-    protected function collector(): TestResultCollector
-    {
-        return $this->collector;
+        $this->collector()->testConsideredRisky($event);
     }
 }

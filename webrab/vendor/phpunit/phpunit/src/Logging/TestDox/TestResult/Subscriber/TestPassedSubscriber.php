@@ -9,22 +9,18 @@
  */
 namespace PHPUnit\Logging\TestDox;
 
+use PHPUnit\Event\Test\Passed;
+use PHPUnit\Event\Test\PassedSubscriber;
+
 /**
  * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
  *
  * @internal This class is not covered by the backward compatibility promise for PHPUnit
  */
-abstract readonly class Subscriber
+final readonly class TestPassedSubscriber extends Subscriber implements PassedSubscriber
 {
-    private TestResultCollector $collector;
-
-    public function __construct(TestResultCollector $collector)
+    public function notify(Passed $event): void
     {
-        $this->collector = $collector;
-    }
-
-    protected function collector(): TestResultCollector
-    {
-        return $this->collector;
+        $this->collector()->testPassed($event);
     }
 }
