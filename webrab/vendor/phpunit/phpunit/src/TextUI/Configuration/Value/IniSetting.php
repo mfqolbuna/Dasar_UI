@@ -14,17 +14,24 @@ namespace PHPUnit\TextUI\Configuration;
  *
  * @immutable
  */
-final readonly class Group
+final readonly class IniSetting
 {
     private string $name;
+    private string $value;
 
-    public function __construct(string $name)
+    public function __construct(string $name, string $value)
     {
-        $this->name = $name;
+        $this->name  = $name;
+        $this->value = $value;
     }
 
     public function name(): string
     {
         return $this->name;
+    }
+
+    public function value(): string
+    {
+        return $this->value;
     }
 }

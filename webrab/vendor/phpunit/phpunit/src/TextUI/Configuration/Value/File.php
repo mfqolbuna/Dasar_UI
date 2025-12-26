@@ -14,17 +14,26 @@ namespace PHPUnit\TextUI\Configuration;
  *
  * @immutable
  */
-final readonly class Group
+final readonly class File
 {
-    private string $name;
+    /**
+     * @var non-empty-string
+     */
+    private string $path;
 
-    public function __construct(string $name)
+    /**
+     * @param non-empty-string $path
+     */
+    public function __construct(string $path)
     {
-        $this->name = $name;
+        $this->path = $path;
     }
 
-    public function name(): string
+    /**
+     * @return non-empty-string
+     */
+    public function path(): string
     {
-        return $this->name;
+        return $this->path;
     }
 }
