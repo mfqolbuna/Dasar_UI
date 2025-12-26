@@ -9,22 +9,23 @@
  */
 namespace PHPUnit\Runner\Baseline;
 
+use PHPUnit\Event\Test\PhpNoticeTriggered;
+use PHPUnit\Event\Test\PhpNoticeTriggeredSubscriber;
+use PHPUnit\Runner\FileDoesNotExistException;
+
 /**
  * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
  *
  * @internal This class is not covered by the backward compatibility promise for PHPUnit
  */
-abstract readonly class Subscriber
+final readonly class TestTriggeredPhpNoticeSubscriber extends Subscriber implements PhpNoticeTriggeredSubscriber
 {
-    private Generator $generator;
-
-    public function __construct(Generator $generator)
+    /**
+     * @throws FileDoesNotExistException
+     * @throws FileDoesNotHaveLineException
+     */
+    public function notify(PhpNoticeTriggered $event): void
     {
-        $this->generator = $generator;
-    }
-
-    protected function generator(): Generator
-    {
-        return $this->generator;
+        $this->generator()->testTriggeredIssue($event);
     }
 }
