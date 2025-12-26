@@ -9,22 +9,18 @@
  */
 namespace PHPUnit\Runner\DeprecationCollector;
 
+use PHPUnit\Event\Test\DeprecationTriggered;
+use PHPUnit\Event\Test\DeprecationTriggeredSubscriber;
+
 /**
  * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
  *
  * @internal This class is not covered by the backward compatibility promise for PHPUnit
  */
-abstract class Subscriber
+final class TestTriggeredDeprecationSubscriber extends Subscriber implements DeprecationTriggeredSubscriber
 {
-    private readonly Collector $collector;
-
-    public function __construct(Collector $collector)
+    public function notify(DeprecationTriggered $event): void
     {
-        $this->collector = $collector;
-    }
-
-    protected function collector(): Collector
-    {
-        return $this->collector;
+        $this->collector()->testTriggeredDeprecation($event);
     }
 }
