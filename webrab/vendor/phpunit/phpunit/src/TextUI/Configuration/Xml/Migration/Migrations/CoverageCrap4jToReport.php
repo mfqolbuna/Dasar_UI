@@ -9,14 +9,27 @@
  */
 namespace PHPUnit\TextUI\XmlConfiguration;
 
-use DOMDocument;
+use DOMElement;
 
 /**
  * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
  *
  * @internal This class is not covered by the backward compatibility promise for PHPUnit
  */
-interface Migration
+final readonly class CoverageCrap4jToReport extends LogToReportMigration
 {
-    public function migrate(DOMDocument $document): void;
+    protected function forType(): string
+    {
+        return 'coverage-crap4j';
+    }
+
+    protected function toReportFormat(DOMElement $logNode): DOMElement
+    {
+        $crap4j = $logNode->ownerDocument->createElement('crap4j');
+        $crap4j->setAttribute('outputFile', $logNode->getAttribute('target'));
+
+        $this->migrateAttributes($logNode, $crap4j, ['threshold']);
+
+        return $crap4j;
+    }
 }

@@ -16,7 +16,15 @@ use DOMDocument;
  *
  * @internal This class is not covered by the backward compatibility promise for PHPUnit
  */
-interface Migration
+final readonly class IntroduceCoverageElement implements Migration
 {
-    public function migrate(DOMDocument $document): void;
+    public function migrate(DOMDocument $document): void
+    {
+        $coverage = $document->createElement('coverage');
+
+        $document->documentElement->insertBefore(
+            $coverage,
+            $document->documentElement->firstChild,
+        );
+    }
 }

@@ -10,13 +10,23 @@
 namespace PHPUnit\TextUI\XmlConfiguration;
 
 use DOMDocument;
+use DOMElement;
 
 /**
  * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
  *
  * @internal This class is not covered by the backward compatibility promise for PHPUnit
  */
-interface Migration
+final readonly class RemoveTestDoxGroupsElement implements Migration
 {
-    public function migrate(DOMDocument $document): void;
+    public function migrate(DOMDocument $document): void
+    {
+        $node = $document->getElementsByTagName('testdoxGroups')->item(0);
+
+        if (!$node instanceof DOMElement || $node->parentNode === null) {
+            return;
+        }
+
+        $node->parentNode->removeChild($node);
+    }
 }

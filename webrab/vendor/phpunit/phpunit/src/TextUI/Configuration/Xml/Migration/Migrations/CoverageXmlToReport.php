@@ -9,14 +9,25 @@
  */
 namespace PHPUnit\TextUI\XmlConfiguration;
 
-use DOMDocument;
+use DOMElement;
 
 /**
  * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
  *
  * @internal This class is not covered by the backward compatibility promise for PHPUnit
  */
-interface Migration
+final readonly class CoverageXmlToReport extends LogToReportMigration
 {
-    public function migrate(DOMDocument $document): void;
+    protected function forType(): string
+    {
+        return 'coverage-xml';
+    }
+
+    protected function toReportFormat(DOMElement $logNode): DOMElement
+    {
+        $xml = $logNode->ownerDocument->createElement('xml');
+        $xml->setAttribute('outputDirectory', $logNode->getAttribute('target'));
+
+        return $xml;
+    }
 }

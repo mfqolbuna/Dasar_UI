@@ -9,14 +9,26 @@
  */
 namespace PHPUnit\TextUI\XmlConfiguration;
 
-use DOMDocument;
+use DOMElement;
 
 /**
  * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
  *
  * @internal This class is not covered by the backward compatibility promise for PHPUnit
  */
-interface Migration
+final readonly class CoverageCloverToReport extends LogToReportMigration
 {
-    public function migrate(DOMDocument $document): void;
+    protected function forType(): string
+    {
+        return 'coverage-clover';
+    }
+
+    protected function toReportFormat(DOMElement $logNode): DOMElement
+    {
+        $clover = $logNode->ownerDocument->createElement('clover');
+
+        $clover->setAttribute('outputFile', $logNode->getAttribute('target'));
+
+        return $clover;
+    }
 }
