@@ -16,20 +16,20 @@ namespace PHPUnit\Framework\TestStatus;
  *
  * @internal This class is not covered by the backward compatibility promise for PHPUnit
  */
-final readonly class Warning extends Known
+final readonly class Risky extends Known
 {
-    public function isWarning(): true
+    public function isRisky(): true
     {
         return true;
     }
 
     public function asInt(): int
     {
-        return 6;
+        return 5;
     }
 
     public function asString(): string
     {
-        return 'warning';
+        return 'risky';
     }
 }
