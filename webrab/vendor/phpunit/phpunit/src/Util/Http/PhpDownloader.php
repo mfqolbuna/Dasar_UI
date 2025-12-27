@@ -9,15 +9,22 @@
  */
 namespace PHPUnit\Util\Http;
 
+use function file_get_contents;
+
 /**
  * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
  *
  * @internal This class is not covered by the backward compatibility promise for PHPUnit
+ *
+ * @codeCoverageIgnore
  */
-interface Downloader
+final class PhpDownloader implements Downloader
 {
     /**
      * @param non-empty-string $url
      */
-    public function download(string $url): false|string;
+    public function download(string $url): false|string
+    {
+        return file_get_contents($url);
+    }
 }
