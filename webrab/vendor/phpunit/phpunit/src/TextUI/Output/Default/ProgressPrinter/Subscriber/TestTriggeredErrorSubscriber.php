@@ -9,22 +9,18 @@
  */
 namespace PHPUnit\TextUI\Output\Default\ProgressPrinter;
 
+use PHPUnit\Event\Test\ErrorTriggered;
+use PHPUnit\Event\Test\ErrorTriggeredSubscriber;
+
 /**
  * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
  *
  * @internal This class is not covered by the backward compatibility promise for PHPUnit
  */
-abstract readonly class Subscriber
+final readonly class TestTriggeredErrorSubscriber extends Subscriber implements ErrorTriggeredSubscriber
 {
-    private ProgressPrinter $printer;
-
-    public function __construct(ProgressPrinter $printer)
+    public function notify(ErrorTriggered $event): void
     {
-        $this->printer = $printer;
-    }
-
-    protected function printer(): ProgressPrinter
-    {
-        return $this->printer;
+        $this->printer()->testTriggeredError($event);
     }
 }
