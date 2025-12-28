@@ -15,19 +15,22 @@ use Symfony\Component\Console\Completion\CompletionSuggestions;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * @author Wouter de Jong <wouter@wouterj.nl>
+ * @author Guillaume Aveline <guillaume.aveline@pm.me>
  */
-class BashCompletionOutput implements CompletionOutputInterface
+class FishCompletionOutput implements CompletionOutputInterface
 {
     public function write(CompletionSuggestions $suggestions, OutputInterface $output): void
     {
-        $values = $suggestions->getValueSuggestions();
+        $values = [];
+        foreach ($suggestions->getValueSuggestions() as $value) {
+            $values[] = $value->getValue().($value->getDescription() ? "\t".$value->getDescription() : '');
+        }
         foreach ($suggestions->getOptionSuggestions() as $option) {
-            $values[] = '--'.$option->getName();
+            $values[] = '--'.$option->getName().($option->getDescription() ? "\t".$option->getDescription() : '');
             if ($option->isNegatable()) {
-                $values[] = '--no-'.$option->getName();
+                $values[] = '--no-'.$option->getName().($option->getDescription() ? "\t".$option->getDescription() : '');
             }
         }
-        $output->writeln(implode("\n", $values));
+        $output->write(implode("\n", $values));
     }
 }
