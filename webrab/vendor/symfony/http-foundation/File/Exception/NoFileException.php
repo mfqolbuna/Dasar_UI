@@ -12,10 +12,10 @@
 namespace Symfony\Component\HttpFoundation\File\Exception;
 
 /**
- * Thrown when an error occurred in the component File.
+ * Thrown when an UPLOAD_ERR_NO_FILE error occurred with UploadedFile.
  *
- * @author Bernhard Schussek <bschussek@gmail.com>
+ * @author Florent Mata <florentmata@gmail.com>
  */
-class FileException extends \RuntimeException
+class NoFileException extends FileException
 {
 }
