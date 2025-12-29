@@ -15,11 +15,11 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestMatcherInterface;
 
 /**
- * Checks the Request URL host name matches a regular expression.
+ * Checks the Request URL path info matches a regular expression.
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class HostRequestMatcher implements RequestMatcherInterface
+class PathRequestMatcher implements RequestMatcherInterface
 {
     public function __construct(private string $regexp)
     {
@@ -27,6 +27,6 @@ class HostRequestMatcher implements RequestMatcherInterface
 
     public function matches(Request $request): bool
     {
-        return preg_match('{'.$this->regexp.'}i', $request->getHost());
+        return preg_match('{'.$this->regexp.'}', rawurldecode($request->getPathInfo()));
     }
 }

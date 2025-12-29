@@ -15,18 +15,18 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestMatcherInterface;
 
 /**
- * Checks the Request URL host name matches a regular expression.
+ * Checks the HTTP port of a Request.
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class HostRequestMatcher implements RequestMatcherInterface
+class PortRequestMatcher implements RequestMatcherInterface
 {
-    public function __construct(private string $regexp)
+    public function __construct(private int $port)
     {
     }
 
     public function matches(Request $request): bool
     {
-        return preg_match('{'.$this->regexp.'}i', $request->getHost());
+        return $request->getPort() === $this->port;
     }
 }

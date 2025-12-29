@@ -15,18 +15,14 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestMatcherInterface;
 
 /**
- * Checks the Request URL host name matches a regular expression.
+ * Checks the Request content is valid JSON.
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class HostRequestMatcher implements RequestMatcherInterface
+class IsJsonRequestMatcher implements RequestMatcherInterface
 {
-    public function __construct(private string $regexp)
-    {
-    }
-
     public function matches(Request $request): bool
     {
-        return preg_match('{'.$this->regexp.'}i', $request->getHost());
+        return json_validate($request->getContent());
     }
 }
