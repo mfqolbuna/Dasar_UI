@@ -12,10 +12,8 @@
 namespace Symfony\Component\HttpFoundation\Exception;
 
 /**
- * Thrown by Request::toArray() when the content cannot be JSON-decoded.
- *
- * @author Tobias Nyholm <tobias.nyholm@gmail.com>
+ * Raised when a user sends a malformed request.
  */
-final class JsonException extends UnexpectedValueException implements RequestExceptionInterface
+class BadRequestException extends UnexpectedValueException implements RequestExceptionInterface
 {
 }

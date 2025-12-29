@@ -12,10 +12,10 @@
 namespace Symfony\Component\HttpFoundation\Exception;
 
 /**
- * Thrown by Request::toArray() when the content cannot be JSON-decoded.
+ * Interface for Request exceptions.
  *
- * @author Tobias Nyholm <tobias.nyholm@gmail.com>
+ * Exceptions implementing this interface should trigger an HTTP 400 response in the application code.
  */
-final class JsonException extends UnexpectedValueException implements RequestExceptionInterface
+interface RequestExceptionInterface
 {
 }

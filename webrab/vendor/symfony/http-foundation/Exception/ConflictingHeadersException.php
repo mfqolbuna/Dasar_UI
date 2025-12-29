@@ -12,10 +12,10 @@
 namespace Symfony\Component\HttpFoundation\Exception;
 
 /**
- * Thrown by Request::toArray() when the content cannot be JSON-decoded.
+ * The HTTP request contains headers with conflicting information.
  *
- * @author Tobias Nyholm <tobias.nyholm@gmail.com>
+ * @author Magnus Nordlander <magnus@fervo.se>
  */
-final class JsonException extends UnexpectedValueException implements RequestExceptionInterface
+class ConflictingHeadersException extends UnexpectedValueException implements RequestExceptionInterface
 {
 }

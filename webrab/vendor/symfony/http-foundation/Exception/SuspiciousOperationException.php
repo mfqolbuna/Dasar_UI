@@ -12,10 +12,9 @@
 namespace Symfony\Component\HttpFoundation\Exception;
 
 /**
- * Thrown by Request::toArray() when the content cannot be JSON-decoded.
- *
- * @author Tobias Nyholm <tobias.nyholm@gmail.com>
+ * Raised when a user has performed an operation that should be considered
+ * suspicious from a security perspective.
  */
-final class JsonException extends UnexpectedValueException implements RequestExceptionInterface
+class SuspiciousOperationException extends UnexpectedValueException implements RequestExceptionInterface
 {
 }
