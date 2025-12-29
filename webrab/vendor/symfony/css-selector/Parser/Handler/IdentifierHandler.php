@@ -27,7 +27,7 @@ use Symfony\Component\CssSelector\Parser\TokenStream;
  *
  * @internal
  */
-class HashHandler implements HandlerInterface
+class IdentifierHandler implements HandlerInterface
 {
     public function __construct(
         private TokenizerPatterns $patterns,
@@ -37,14 +37,14 @@ class HashHandler implements HandlerInterface
 
     public function handle(Reader $reader, TokenStream $stream): bool
     {
-        $match = $reader->findPattern($this->patterns->getHashPattern());
+        $match = $reader->findPattern($this->patterns->getIdentifierPattern());
 
         if (!$match) {
             return false;
         }
 
-        $value = $this->escaping->escapeUnicode($match[1]);
-        $stream->push(new Token(Token::TYPE_HASH, $value, $reader->getPosition()));
+        $value = $this->escaping->escapeUnicode($match[0]);
+        $stream->push(new Token(Token::TYPE_IDENTIFIER, $value, $reader->getPosition()));
         $reader->moveForward(\strlen($match[0]));
 
         return true;
