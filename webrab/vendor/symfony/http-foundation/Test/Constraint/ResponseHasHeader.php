@@ -12,26 +12,18 @@
 namespace Symfony\Component\HttpFoundation\Test\Constraint;
 
 use PHPUnit\Framework\Constraint\Constraint;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-/**
- * Asserts that the response is in the given format.
- *
- * @author Kévin Dunglas <dunglas@gmail.com>
- */
-final class ResponseFormatSame extends Constraint
+final class ResponseHasHeader extends Constraint
 {
     public function __construct(
-        private Request $request,
-        private ?string $format,
-        private readonly bool $verbose = true,
+        private string $headerName,
     ) {
     }
 
     public function toString(): string
     {
-        return 'format is '.($this->format ?? 'null');
+        return \sprintf('has header "%s"', $this->headerName);
     }
 
     /**
@@ -39,7 +31,7 @@ final class ResponseFormatSame extends Constraint
      */
     protected function matches($response): bool
     {
-        return $this->format === $this->request->getFormat($response->headers->get('Content-Type'));
+        return $response->headers->has($this->headerName);
     }
 
     /**
@@ -48,13 +40,5 @@ final class ResponseFormatSame extends Constraint
     protected function failureDescription($response): string
     {
         return 'the Response '.$this->toString();
-    }
-
-    /**
-     * @param Response $response
-     */
-    protected function additionalFailureDescription($response): string
-    {
-        return $this->verbose ? (string) $response : explode("\r\n\r\n", (string) $response)[0];
     }
 }

@@ -12,26 +12,20 @@
 namespace Symfony\Component\HttpFoundation\Test\Constraint;
 
 use PHPUnit\Framework\Constraint\Constraint;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-/**
- * Asserts that the response is in the given format.
- *
- * @author Kévin Dunglas <dunglas@gmail.com>
- */
-final class ResponseFormatSame extends Constraint
+final class ResponseIsRedirected extends Constraint
 {
-    public function __construct(
-        private Request $request,
-        private ?string $format,
-        private readonly bool $verbose = true,
-    ) {
+    /**
+     * @param bool $verbose If true, the entire response is printed on failure. If false, the response body is omitted.
+     */
+    public function __construct(private readonly bool $verbose = true)
+    {
     }
 
     public function toString(): string
     {
-        return 'format is '.($this->format ?? 'null');
+        return 'is redirected';
     }
 
     /**
@@ -39,7 +33,7 @@ final class ResponseFormatSame extends Constraint
      */
     protected function matches($response): bool
     {
-        return $this->format === $this->request->getFormat($response->headers->get('Content-Type'));
+        return $response->isRedirect();
     }
 
     /**
