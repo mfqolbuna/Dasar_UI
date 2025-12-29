@@ -12,10 +12,10 @@
 namespace Symfony\Component\Console\Exception;
 
 /**
- * ExceptionInterface.
+ * Represents failure to read input from stdin.
  *
- * @author Jérôme Tamarelle <jerome@tamarelle.net>
+ * @author Gabriel Ostrolucký <gabriel.ostrolucky@gmail.com>
  */
-interface ExceptionInterface extends \Throwable
+class MissingInputException extends RuntimeException implements ExceptionInterface
 {
 }

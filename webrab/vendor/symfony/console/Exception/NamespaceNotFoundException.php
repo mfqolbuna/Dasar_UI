@@ -12,10 +12,10 @@
 namespace Symfony\Component\Console\Exception;
 
 /**
- * ExceptionInterface.
+ * Represents an incorrect namespace typed in the console.
  *
- * @author Jérôme Tamarelle <jerome@tamarelle.net>
+ * @author Pierre du Plessis <pdples@gmail.com>
  */
-interface ExceptionInterface extends \Throwable
+class NamespaceNotFoundException extends CommandNotFoundException
 {
 }
