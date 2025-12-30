@@ -11,6 +11,11 @@
 
 namespace Symfony\Component\Routing\Exception;
 
-class LogicException extends \LogicException
+/**
+ * Exception thrown when no routes are configured.
+ *
+ * @author Yonel Ceruto <yonelceruto@gmail.com>
+ */
+class NoConfigurationException extends ResourceNotFoundException
 {
 }

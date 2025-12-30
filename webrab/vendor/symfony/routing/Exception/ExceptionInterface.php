@@ -11,6 +11,11 @@
 
 namespace Symfony\Component\Routing\Exception;
 
-class LogicException extends \LogicException
+/**
+ * ExceptionInterface.
+ *
+ * @author Alexandre Salomé <alexandre.salome@gmail.com>
+ */
+interface ExceptionInterface extends \Throwable
 {
 }

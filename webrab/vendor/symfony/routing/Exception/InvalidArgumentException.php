@@ -11,6 +11,6 @@
 
 namespace Symfony\Component\Routing\Exception;
 
-class LogicException extends \LogicException
+class InvalidArgumentException extends \InvalidArgumentException implements ExceptionInterface
 {
 }
