@@ -14,10 +14,12 @@ namespace Symfony\Component\Mime\HtmlToTextConverter;
 /**
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class DefaultHtmlToTextConverter implements HtmlToTextConverterInterface
+interface HtmlToTextConverterInterface
 {
-    public function convert(string $html, string $charset): string
-    {
-        return strip_tags(preg_replace('{<(head|style)\b.*?</\1>}is', '', $html));
-    }
+    /**
+     * Converts an HTML representation of a Message to a text representation.
+     *
+     * The output must use the same charset as the HTML one.
+     */
+    public function convert(string $html, string $charset): string;
 }
