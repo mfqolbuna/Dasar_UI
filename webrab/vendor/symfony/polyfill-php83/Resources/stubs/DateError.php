@@ -10,11 +10,7 @@
  */
 
 if (\PHP_VERSION_ID < 80300) {
-    #[Attribute(Attribute::TARGET_METHOD)]
-    final class Override
+    class DateError extends Error
     {
-        public function __construct()
-        {
-        }
     }
 }

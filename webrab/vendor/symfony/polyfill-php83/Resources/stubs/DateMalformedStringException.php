@@ -10,11 +10,7 @@
  */
 
 if (\PHP_VERSION_ID < 80300) {
-    #[Attribute(Attribute::TARGET_METHOD)]
-    final class Override
+    class DateMalformedStringException extends DateException
     {
-        public function __construct()
-        {
-        }
     }
 }
