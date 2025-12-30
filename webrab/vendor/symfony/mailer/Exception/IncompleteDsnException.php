@@ -12,8 +12,8 @@
 namespace Symfony\Component\Mailer\Exception;
 
 /**
- * @author Fabien Potencier <fabien@symfony.com>
+ * @author Konstantin Myakshin <molodchick@gmail.com>
  */
-class LogicException extends \LogicException implements ExceptionInterface
+class IncompleteDsnException extends InvalidArgumentException
 {
 }

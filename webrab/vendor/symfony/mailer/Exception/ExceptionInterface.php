@@ -12,8 +12,10 @@
 namespace Symfony\Component\Mailer\Exception;
 
 /**
+ * Exception interface for all exceptions thrown by the component.
+ *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class LogicException extends \LogicException implements ExceptionInterface
+interface ExceptionInterface extends \Throwable
 {
 }

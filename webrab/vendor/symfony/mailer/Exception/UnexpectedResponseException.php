@@ -11,9 +11,6 @@
 
 namespace Symfony\Component\Mailer\Exception;
 
-/**
- * @author Fabien Potencier <fabien@symfony.com>
- */
-class LogicException extends \LogicException implements ExceptionInterface
+class UnexpectedResponseException extends TransportException
 {
 }

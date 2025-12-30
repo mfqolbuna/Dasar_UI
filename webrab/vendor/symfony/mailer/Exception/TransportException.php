@@ -14,6 +14,17 @@ namespace Symfony\Component\Mailer\Exception;
 /**
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class LogicException extends \LogicException implements ExceptionInterface
+class TransportException extends RuntimeException implements TransportExceptionInterface
 {
+    private string $debug = '';
+
+    public function getDebug(): string
+    {
+        return $this->debug;
+    }
+
+    public function appendDebug(string $debug): void
+    {
+        $this->debug .= $debug;
+    }
 }

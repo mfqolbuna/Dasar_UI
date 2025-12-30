@@ -14,6 +14,6 @@ namespace Symfony\Component\Mailer\Exception;
 /**
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class LogicException extends \LogicException implements ExceptionInterface
+class RuntimeException extends \RuntimeException implements ExceptionInterface
 {
 }
