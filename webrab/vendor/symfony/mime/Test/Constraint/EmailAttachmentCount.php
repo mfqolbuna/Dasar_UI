@@ -12,18 +12,19 @@
 namespace Symfony\Component\Mime\Test\Constraint;
 
 use PHPUnit\Framework\Constraint\Constraint;
+use Symfony\Component\Mime\Message;
 use Symfony\Component\Mime\RawMessage;
 
-final class EmailHasHeader extends Constraint
+final class EmailAttachmentCount extends Constraint
 {
     public function __construct(
-        private string $headerName,
+        private int $expectedValue,
     ) {
     }
 
     public function toString(): string
     {
-        return \sprintf('has header "%s"', $this->headerName);
+        return \sprintf('has sent "%d" attachment(s)', $this->expectedValue);
     }
 
     /**
@@ -31,11 +32,11 @@ final class EmailHasHeader extends Constraint
      */
     protected function matches($message): bool
     {
-        if (RawMessage::class === $message::class) {
-            throw new \LogicException('Unable to test a message header on a RawMessage instance.');
+        if (RawMessage::class === $message::class || Message::class === $message::class) {
+            throw new \LogicException('Unable to test a message attachment on a RawMessage or Message instance.');
         }
 
-        return $message->getHeaders()->has($this->headerName);
+        return $this->expectedValue === \count($message->getAttachments());
     }
 
     /**

@@ -12,18 +12,20 @@
 namespace Symfony\Component\Mime\Test\Constraint;
 
 use PHPUnit\Framework\Constraint\Constraint;
+use Symfony\Component\Mime\Header\UnstructuredHeader;
 use Symfony\Component\Mime\RawMessage;
 
-final class EmailHasHeader extends Constraint
+final class EmailHeaderSame extends Constraint
 {
     public function __construct(
         private string $headerName,
+        private string $expectedValue,
     ) {
     }
 
     public function toString(): string
     {
-        return \sprintf('has header "%s"', $this->headerName);
+        return \sprintf('has header "%s" with value "%s"', $this->headerName, $this->expectedValue);
     }
 
     /**
@@ -35,7 +37,7 @@ final class EmailHasHeader extends Constraint
             throw new \LogicException('Unable to test a message header on a RawMessage instance.');
         }
 
-        return $message->getHeaders()->has($this->headerName);
+        return $this->expectedValue === $this->getHeaderValue($message);
     }
 
     /**
@@ -43,6 +45,15 @@ final class EmailHasHeader extends Constraint
      */
     protected function failureDescription($message): string
     {
-        return 'the Email '.$this->toString();
+        return \sprintf('the Email %s (value is %s)', $this->toString(), $this->getHeaderValue($message) ?? 'null');
+    }
+
+    private function getHeaderValue($message): ?string
+    {
+        if (null === $header = $message->getHeaders()->get($this->headerName)) {
+            return null;
+        }
+
+        return $header instanceof UnstructuredHeader ? $header->getValue() : $header->getBodyAsString();
     }
 }
