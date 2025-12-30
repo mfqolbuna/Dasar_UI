@@ -12,10 +12,10 @@
 namespace Symfony\Component\Translation\Exception;
 
 /**
- * Base LogicException for Translation component.
+ * Exception interface for all exceptions thrown by the component.
  *
- * @author Abdellatif Ait boudad <a.aitboudad@gmail.com>
+ * @author Fabien Potencier <fabien@symfony.com>
  */
-class LogicException extends \LogicException implements ExceptionInterface
+interface ExceptionInterface extends \Throwable
 {
 }

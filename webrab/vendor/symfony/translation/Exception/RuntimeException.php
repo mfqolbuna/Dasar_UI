@@ -12,10 +12,10 @@
 namespace Symfony\Component\Translation\Exception;
 
 /**
- * Base LogicException for Translation component.
+ * Base RuntimeException for the Translation component.
  *
  * @author Abdellatif Ait boudad <a.aitboudad@gmail.com>
  */
-class LogicException extends \LogicException implements ExceptionInterface
+class RuntimeException extends \RuntimeException implements ExceptionInterface
 {
 }

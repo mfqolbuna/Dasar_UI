@@ -12,10 +12,10 @@
 namespace Symfony\Component\Translation\Exception;
 
 /**
- * Base LogicException for Translation component.
+ * Thrown when a resource cannot be loaded.
  *
- * @author Abdellatif Ait boudad <a.aitboudad@gmail.com>
+ * @author Fabien Potencier <fabien@symfony.com>
  */
-class LogicException extends \LogicException implements ExceptionInterface
+class InvalidResourceException extends \InvalidArgumentException implements ExceptionInterface
 {
 }
