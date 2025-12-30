@@ -16,10 +16,17 @@ use Symfony\Component\Mime\Header\UnstructuredHeader;
 /**
  * @author Kevin Bond <kevinbond@gmail.com>
  */
-final class TagHeader extends UnstructuredHeader
+final class MetadataHeader extends UnstructuredHeader
 {
-    public function __construct(string $value)
+    public function __construct(
+        private string $key,
+        string $value,
+    ) {
+        parent::__construct('X-Metadata-'.$key, $value);
+    }
+
+    public function getKey(): string
     {
-        parent::__construct('X-Tag', $value);
+        return $this->key;
     }
 }
