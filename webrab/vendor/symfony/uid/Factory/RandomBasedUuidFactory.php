@@ -11,12 +11,22 @@
 
 namespace Symfony\Component\Uid\Factory;
 
-use Symfony\Component\Uid\Ulid;
+use Symfony\Component\Uid\UuidV4;
 
-class UlidFactory
+class RandomBasedUuidFactory
 {
-    public function create(?\DateTimeInterface $time = null): Ulid
+    /**
+     * @param class-string $class
+     */
+    public function __construct(
+        private string $class,
+    ) {
+    }
+
+    public function create(): UuidV4
     {
-        return new Ulid(null === $time ? null : Ulid::generate($time));
+        $class = $this->class;
+
+        return new $class();
     }
 }
