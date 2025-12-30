@@ -11,21 +11,27 @@
 
 namespace Symfony\Component\Mailer\Messenger;
 
-use Symfony\Component\Mailer\SentMessage;
-use Symfony\Component\Mailer\Transport\TransportInterface;
+use Symfony\Component\Mailer\Envelope;
+use Symfony\Component\Mime\RawMessage;
 
 /**
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class MessageHandler
+class SendEmailMessage
 {
     public function __construct(
-        private TransportInterface $transport,
+        private RawMessage $message,
+        private ?Envelope $envelope = null,
     ) {
     }
 
-    public function __invoke(SendEmailMessage $message): ?SentMessage
+    public function getMessage(): RawMessage
     {
-        return $this->transport->send($message->getMessage(), $message->getEnvelope());
+        return $this->message;
+    }
+
+    public function getEnvelope(): ?Envelope
+    {
+        return $this->envelope;
     }
 }
