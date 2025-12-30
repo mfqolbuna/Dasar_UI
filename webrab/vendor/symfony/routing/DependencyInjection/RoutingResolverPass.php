@@ -12,25 +12,29 @@
 namespace Symfony\Component\Routing\DependencyInjection;
 
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
+use Symfony\Component\DependencyInjection\Compiler\PriorityTaggedServiceTrait;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 
 /**
- * Registers the expression language providers.
+ * Adds tagged routing.loader services to routing.resolver service.
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class AddExpressionLanguageProvidersPass implements CompilerPassInterface
+class RoutingResolverPass implements CompilerPassInterface
 {
+    use PriorityTaggedServiceTrait;
+
     public function process(ContainerBuilder $container): void
     {
-        if (!$container->has('router.default')) {
+        if (false === $container->hasDefinition('routing.resolver')) {
             return;
         }
 
-        $definition = $container->findDefinition('router.default');
-        foreach ($container->findTaggedServiceIds('routing.expression_language_provider', true) as $id => $attributes) {
-            $definition->addMethodCall('addExpressionLanguageProvider', [new Reference($id)]);
+        $definition = $container->getDefinition('routing.resolver');
+
+        foreach ($this->findAndSortTaggedServices('routing.loader', $container) as $id) {
+            $definition->addMethodCall('addLoader', [new Reference($id)]);
         }
     }
 }
